@@ -37,9 +37,10 @@ public:
     void setupServiceToken(const char* token);
 
     void reportDiviceToken(const char *token,CCObject* pTarget, SEL_CallFuncND pSelector);
-        
-    int init(CCObject* pTarget, SEL_CallFuncND pSelector);
     
+    //data  -> (char*)token
+    int init(CCObject* pTarget, SEL_CallFuncND pSelector);
+    //data  -> (char*)msessage
     int setNotificationHandler(CCObject* pTarget, SEL_CallFuncND pSelector);
     
 public:

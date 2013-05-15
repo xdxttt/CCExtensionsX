@@ -121,10 +121,13 @@ public:
     void setupServiceAddress(const char* address);
     void setupServiceToken(const char* token);
     
+    //  std::list<CCAppStoreProducts*>* list =(std::list<CCAppStoreProducts*>*)data;
     int requestSKProducts(std::list<std::string> products_ids,CCObject* pTarget, SEL_CallFuncND pSelector);
     
+    //  std::list<CCAppStorePaymentTransaction*>* list =(std::list<CCAppStorePaymentTransaction*>*)data;
     int pay(std::string products_id,int quantity,CCObject* pTarget, SEL_CallFuncND pSelector);
-    
+   
+    //  extension::CCHttpResponse *response  = (extension::CCHttpResponse *)data;
     int verify(const char* businessID, std::string productIdentifier,std::string receipt,CCObject* pTarget, SEL_CallFuncND pSelector);
     
     int completeTransaction(std::string transactionIdentifier);

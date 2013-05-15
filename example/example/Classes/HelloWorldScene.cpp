@@ -83,17 +83,21 @@ bool HelloWorld::init()
     this->addChild(pSprite, 0);
     
     
-    CCConfig::getInstance()->setupServiceAddress("http://192.168.1.112/xGameTools/index.php");
+    CCConfig::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
     CCConfig::getInstance()->setupServiceToken("122112");
     
-    CCAppStoreIAP::getInstance()->setupServiceAddress("http://192.168.1.112/xGameTools/index.php");
+    CCAppStoreIAP::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
     CCAppStoreIAP::getInstance()->setupServiceToken("122112");
     
-    CCRemoteNotification::getInstance()->setupServiceAddress("http://192.168.1.112/xGameTools/index.php");
+    CCRemoteNotification::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
     CCAppStoreIAP::getInstance()->setupServiceToken("122112");
     
     
     CCConfig::getInstance()->getModelConf("purchase",this, callfuncND_selector(HelloWorld::getProductsConfCallBack));
+    CCConfig::getInstance()->getModelConf("purchaseRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
+    CCConfig::getInstance()->getModelConf("loginRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
+    CCConfig::getInstance()->getModelConf("dailyChallenge",this, callfuncND_selector(HelloWorld::getConfCallBack));
+    CCConfig::getInstance()->getModelConf("dailyRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
     
     CCRemoteNotification::getInstance()->init(this, callfuncND_selector(HelloWorld::initRemoteNotificationCallBack));
     CCRemoteNotification::getInstance()->setNotificationHandler(this, callfuncND_selector(HelloWorld::remoteNotification));
@@ -120,12 +124,22 @@ void HelloWorld::remoteNotification(cocos2d::CCNode *node, void *data){
     CCLOG("remoteNotification %s:",(char*)data);
     
 }
+void HelloWorld::getConfCallBack(cocos2d::CCNode *node, void *data){
+    CCHttpResponse *reponseObj = (CCHttpResponse *)data;
+    std::string respData(reponseObj->getResponseData()->begin(),reponseObj->getResponseData()->end());
+    CCLog("ProductsConf: \r\n%s",respData.c_str());
+
+    cJSON *reponse = cJSON_Parse((char*)respData.c_str());
+    if (reponse) {
+        
+    }
+}
 
 void HelloWorld::getProductsConfCallBack(cocos2d::CCNode *node, void *data){
     CCHttpResponse *reponseObj = (CCHttpResponse *)data;
-    
-    std::string respData(reponseObj->getResponseData()->begin(),reponseObj->getResponseData()->end());
-    
+        std::string respData(reponseObj->getResponseData()->begin(),reponseObj->getResponseData()->end());
+    CCLog("ProductsConf: \r\n%s",respData.c_str());
+
     cJSON *reponse = cJSON_Parse((char*)respData.c_str());
     if (reponse&& cJSON_GetObjectItem(reponse, "ret")->valueint==1000) {
         
@@ -139,7 +153,6 @@ void HelloWorld::getProductsConfCallBack(cocos2d::CCNode *node, void *data){
         }
         CCAppStoreIAP::getInstance()->requestSKProducts(products_ids, this, callfuncND_selector(HelloWorld::requestSKProductsCallBack));
     }
-    CCLog("ProductsConf: \r\n%s",respData.c_str());
 }
 
 

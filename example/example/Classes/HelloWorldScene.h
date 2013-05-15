@@ -23,7 +23,8 @@ public:
     void getProductsConfCallBack(cocos2d::CCNode *node, void *data);
 
     
-    
+    void getConfCallBack(cocos2d::CCNode *node, void *data);
+
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(HelloWorld);
 };

@@ -19,6 +19,8 @@ public:
 
     void setupServiceAddress(const char* address);
     void setupServiceToken(const char* token);
+    
+    //  extension::CCHttpResponse *response  = (extension::CCHttpResponse *)data;
     void getModelConf(const char *model,CCObject* pTarget, SEL_CallFuncND pSelector);
     
 public:
