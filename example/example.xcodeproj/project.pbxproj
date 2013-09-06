@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B536AAF017D9C827006E7ADD /* Gift.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B536AAEE17D9C827006E7ADD /* Gift.cpp */; };
 		B5C4847C173FDA6D004D24DC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C4847B173FDA6D004D24DC /* QuartzCore.framework */; };
 		B5C4847E173FDA6D004D24DC /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C4847D173FDA6D004D24DC /* OpenGLES.framework */; };
 		B5C48480173FDA6D004D24DC /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C4847F173FDA6D004D24DC /* OpenAL.framework */; };
@@ -222,6 +223,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B536AAEE17D9C827006E7ADD /* Gift.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gift.cpp; sourceTree = "<group>"; };
+		B536AAEF17D9C827006E7ADD /* Gift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gift.h; sourceTree = "<group>"; };
 		B5C48478173FDA6D004D24DC /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C4847B173FDA6D004D24DC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B5C4847D173FDA6D004D24DC /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -709,6 +712,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B536AAED17D9C827006E7ADD /* Gift */ = {
+			isa = PBXGroup;
+			children = (
+				B536AAEE17D9C827006E7ADD /* Gift.cpp */,
+				B536AAEF17D9C827006E7ADD /* Gift.h */,
+			);
+			path = Gift;
+			sourceTree = "<group>";
+		};
 		B5C4846F173FDA6D004D24DC = {
 			isa = PBXGroup;
 			children = (
@@ -1632,6 +1644,7 @@
 		B5C48741173FDAC4004D24DC /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B536AAED17D9C827006E7ADD /* Gift */,
 				B5C48742173FDAC4004D24DC /* AppStore */,
 				B5C48749173FDAC4004D24DC /* Config */,
 				B5C4874C173FDAC4004D24DC /* Crypto */,
@@ -1955,6 +1968,7 @@
 				B5C48759173FDAC4004D24DC /* md5.cpp in Sources */,
 				B5C4875A173FDAC4004D24DC /* DeviceInfo.mm in Sources */,
 				B5C4877C173FDBB6004D24DC /* cJSON.c in Sources */,
+				B536AAF017D9C827006E7ADD /* Gift.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

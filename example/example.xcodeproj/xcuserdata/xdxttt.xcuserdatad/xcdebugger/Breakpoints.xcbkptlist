@@ -21,24 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "example/Classes/HelloWorldScene.cpp"
-         timestampString = "390222838.877818"
+         timestampString = "400164431.509129"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "139"
-         endingLineNumber = "139"
-         landmarkName = "HelloWorld::getProductsConfCallBack(cocos2d::CCNode *node, void *data)"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "example/Classes/HelloWorldScene.cpp"
-         timestampString = "390222933.335595"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "151"
-         endingLineNumber = "151"
+         startingLineNumber = "155"
+         endingLineNumber = "155"
          landmarkName = "HelloWorld::getProductsConfCallBack(cocos2d::CCNode *node, void *data)"
          landmarkType = "5">
       </FileBreakpoint>

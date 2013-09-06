@@ -24,6 +24,7 @@ public:
 
     
     void getConfCallBack(cocos2d::CCNode *node, void *data);
+    void getGiftCallBack(cocos2d::CCNode *node, void *data);
 
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(HelloWorld);

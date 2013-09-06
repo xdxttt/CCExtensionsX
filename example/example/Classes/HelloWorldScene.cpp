@@ -9,6 +9,7 @@
 #include "DeviceInfo.h"
 #include "RemoteNotification.h"
 #include "Config.h"
+#include "Gift.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -90,7 +91,10 @@ bool HelloWorld::init()
     CCAppStoreIAP::getInstance()->setupServiceToken("122112");
     
     CCRemoteNotification::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
-    CCAppStoreIAP::getInstance()->setupServiceToken("122112");
+    CCRemoteNotification::getInstance()->setupServiceToken("122112");
+  
+    CCGift::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
+    CCGift::getInstance()->setupServiceToken("122112");
     
     
     CCConfig::getInstance()->getModelConf("purchase",this, callfuncND_selector(HelloWorld::getProductsConfCallBack));
@@ -102,7 +106,9 @@ bool HelloWorld::init()
     CCRemoteNotification::getInstance()->init(this, callfuncND_selector(HelloWorld::initRemoteNotificationCallBack));
     CCRemoteNotification::getInstance()->setNotificationHandler(this, callfuncND_selector(HelloWorld::remoteNotification));
     
-    
+    CCGift::getInstance()->exchange("5229ccf8a1a71f02120000f3",this, callfuncND_selector(HelloWorld::getGiftCallBack));
+    //CCGift::getInstance()->exchange("122112",this, callfuncND_selector(HelloWorld::getGiftCallBack));
+
     return true;
 }
 
@@ -129,6 +135,16 @@ void HelloWorld::getConfCallBack(cocos2d::CCNode *node, void *data){
     std::string respData(reponseObj->getResponseData()->begin(),reponseObj->getResponseData()->end());
     CCLog("ProductsConf: \r\n%s",respData.c_str());
 
+    cJSON *reponse = cJSON_Parse((char*)respData.c_str());
+    if (reponse) {
+        
+    }
+}
+void HelloWorld::getGiftCallBack(cocos2d::CCNode *node, void *data){
+    CCHttpResponse *reponseObj = (CCHttpResponse *)data;
+    std::string respData(reponseObj->getResponseData()->begin(),reponseObj->getResponseData()->end());
+    CCLog("getGiftCallBack: \r\n%s",respData.c_str());
+    
     cJSON *reponse = cJSON_Parse((char*)respData.c_str());
     if (reponse) {
         
@@ -167,7 +183,6 @@ void HelloWorld::requestSKProductsCallBack(cocos2d::CCNode *node, void *data){
         CCLOG("priceLocale:%s",product->priceLocale.c_str());
         CCLOG("price:%f",product->price);
         CCLOG("productIdentifier:%s",product->productIdentifier.c_str());
-        
         CCAppStoreIAP::getInstance()->pay(product->productIdentifier, 2, this,callfuncND_selector(HelloWorld::payCallBack));
     }
     
