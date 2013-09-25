@@ -18,7 +18,7 @@ class CCDeviceInfo :public cocos2d::CCObject{
 public:
     static CCDeviceInfo *getInstance();
     static void destroyInstance();
-    std::string getUDID();
+    std::string getUUID();
     
 public:
     CCDeviceInfo();

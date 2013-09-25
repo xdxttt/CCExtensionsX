@@ -119,7 +119,8 @@ public:
     ~CCAppStoreIAP();
 
     void setupServiceAddress(const char* address);
-    void setupServiceToken(const char* token);
+    void setupSecretKey(const char* secretKey);
+    void setupAppID(const char* appID);
     
     //  std::list<CCAppStoreProducts*>* list =(std::list<CCAppStoreProducts*>*)data;
     int requestSKProducts(std::list<std::string> products_ids,CCObject* pTarget, SEL_CallFuncND pSelector);
@@ -133,6 +134,7 @@ public:
     int completeTransaction(std::string transactionIdentifier);
 private:
     std::string address;
-    std::string token;
+    std::string secretKey;
+    std::string appID;
 };
 #endif /* defined(__CCAppStoreIAP__) */

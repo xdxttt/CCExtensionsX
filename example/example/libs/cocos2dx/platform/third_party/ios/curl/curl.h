@@ -1821,7 +1821,6 @@ CURL_EXTERN char *curl_version(void);
 CURL_EXTERN char *curl_easy_escape(CURL *handle,
                                    const char *string,
                                    int length);
-
 /* the previous version: */
 CURL_EXTERN char *curl_escape(const char *string,
                               int length);

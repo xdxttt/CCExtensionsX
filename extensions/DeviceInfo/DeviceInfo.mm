@@ -27,7 +27,7 @@ CCDeviceInfo::~CCDeviceInfo(){
     
 }
 
-std::string CCDeviceInfo::getUDID(){
+std::string CCDeviceInfo::getUUID(){
     CFUUIDRef   uuid;
     CFStringRef uuidStr;
     

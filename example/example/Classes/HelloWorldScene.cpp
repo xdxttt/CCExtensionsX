@@ -10,6 +10,7 @@
 #include "RemoteNotification.h"
 #include "Config.h"
 #include "Gift.h"
+#include "Crypto.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -84,31 +85,39 @@ bool HelloWorld::init()
     this->addChild(pSprite, 0);
     
     
-    CCConfig::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
-    CCConfig::getInstance()->setupServiceToken("122112");
+    CCConfig::getInstance()->setupServiceAddress("http://127.0.0.1/Storage/Clump/index.php");
+    CCConfig::getInstance()->setupAppID("52417dabd5750b5204d63af8");
+    CCConfig::getInstance()->setupSecretKey("9fa045e16799bdd0");
     
-    CCAppStoreIAP::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
-    CCAppStoreIAP::getInstance()->setupServiceToken("122112");
-    
-    CCRemoteNotification::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
-    CCRemoteNotification::getInstance()->setupServiceToken("122112");
-  
-    CCGift::getInstance()->setupServiceAddress("http://115.28.42.117/xGameTools/index.php");
-    CCGift::getInstance()->setupServiceToken("122112");
-    
-    
-    CCConfig::getInstance()->getModelConf("purchase",this, callfuncND_selector(HelloWorld::getProductsConfCallBack));
-    CCConfig::getInstance()->getModelConf("purchaseRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
-    CCConfig::getInstance()->getModelConf("loginRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
-    CCConfig::getInstance()->getModelConf("dailyChallenge",this, callfuncND_selector(HelloWorld::getConfCallBack));
-    CCConfig::getInstance()->getModelConf("dailyRewards",this, callfuncND_selector(HelloWorld::getConfCallBack));
-    
-    CCRemoteNotification::getInstance()->init(this, callfuncND_selector(HelloWorld::initRemoteNotificationCallBack));
-    CCRemoteNotification::getInstance()->setNotificationHandler(this, callfuncND_selector(HelloWorld::remoteNotification));
-    
-    CCGift::getInstance()->exchange("5229ccf8a1a71f02120000f3",this, callfuncND_selector(HelloWorld::getGiftCallBack));
-    //CCGift::getInstance()->exchange("122112",this, callfuncND_selector(HelloWorld::getGiftCallBack));
+    CCAppStoreIAP::getInstance()->setupServiceAddress("http://127.0.0.1/Storage/Clump/index.php");
+    CCAppStoreIAP::getInstance()->setupAppID("52417dabd5750b5204d63af8");
+    CCAppStoreIAP::getInstance()->setupSecretKey("9fa045e16799bdd0");
 
+    CCRemoteNotification::getInstance()->setupServiceAddress("http://127.0.0.1/Storage/Clump/index.php");
+    CCRemoteNotification::getInstance()->setupAppID("52417dabd5750b5204d63af8");
+    CCRemoteNotification::getInstance()->setupSecretKey("9fa045e16799bdd0");
+
+    CCGift::getInstance()->setupServiceAddress("http://127.0.0.1/Storage/Clump/index.php");
+    CCGift::getInstance()->setupAppID("52417dabd5750b5204d63af8");
+    CCGift::getInstance()->setupSecretKey("9fa045e16799bdd0");
+    
+    //CCConfig::getInstance()->getModelConf("purchase",this, callfuncND_selector(HelloWorld::getProductsConfCallBack));
+    
+    //CCRemoteNotification::getInstance()->init(this, callfuncND_selector(HelloWorld::initRemoteNotificationCallBack));
+    //CCRemoteNotification::getInstance()->setNotificationHandler(this, callfuncND_selector(HelloWorld::remoteNotification));
+    
+    CCConfig::getInstance()->getModelConf("testmoble",this, callfuncND_selector(HelloWorld::getConfCallBack));
+    
+    CCConfig::getInstance()->setupSecretKey("111");
+    CCConfig::getInstance()->getModelConf("testmoble",this, callfuncND_selector(HelloWorld::getConfCallBack));
+  
+    CCConfig::getInstance()->setupAppID("222");
+   CCConfig::getInstance()->getModelConf("testmoble",this, callfuncND_selector(HelloWorld::getConfCallBack));
+    
+    CCGift::getInstance()->exchange("c19464403464c00d",this, callfuncND_selector(HelloWorld::getGiftCallBack));
+
+    std::string test = "test";
+    CCLog("md5: %s",CCCrypto::getInstance()->md5(test.c_str(),test.length()).c_str());
     return true;
 }
 
@@ -128,7 +137,6 @@ void HelloWorld::initRemoteNotificationCallBack(cocos2d::CCNode *node, void *dat
 
 void HelloWorld::remoteNotification(cocos2d::CCNode *node, void *data){
     CCLOG("remoteNotification %s:",(char*)data);
-    
 }
 void HelloWorld::getConfCallBack(cocos2d::CCNode *node, void *data){
     CCHttpResponse *reponseObj = (CCHttpResponse *)data;
@@ -200,10 +208,8 @@ void HelloWorld::payCallBack(cocos2d::CCNode *node, void *data){
             CCLOG("transactionReceipt:%s",payment->transactionReceipt);
         }
         CCLOG("error:%s",payment->error.c_str());
-        
         CCLOG("quantity: %d",payment->payment.quantity);
         CCLOG("productIdentifier:%s",payment->payment.productIdentifier.c_str());
-        //      CCLOG("quantity:%d",payment->payment.quantity);
         
         if (payment->transactionState==CCAppStorePaymentTransactionStatePurchased&&payment->transactionIdentifier.size()>0) {
             CCAppStoreIAP::getInstance()->verify("1",payment->transactionIdentifier,payment->transactionReceipt, this, callfuncND_selector(HelloWorld::verifyCallBack));

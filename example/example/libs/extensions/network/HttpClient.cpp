@@ -230,7 +230,10 @@ bool configureCURL(CURL *handle)
     if (code != CURLE_OK) {
         return false;
     }
-    
+    code = curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, true);
+    if (code != CURLE_OK) {
+        return false;
+    }
     return true;
 }
 

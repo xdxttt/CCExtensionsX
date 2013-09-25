@@ -37,8 +37,11 @@ void CCRemoteNotification::destroyInstance()
 void CCRemoteNotification::setupServiceAddress(const char* address){
     this->address = address;
 }
-void CCRemoteNotification::setupServiceToken(const char *token){
-    this->token = token;
+void CCRemoteNotification::setupSecretKey(const char *secretKey){
+    this->secretKey = secretKey;
+}
+void CCRemoteNotification::setupAppID(const char *appID){
+    this->appID = appID;
 }
 
 CCRemoteNotification* CCRemoteNotification::getInstance()
@@ -53,11 +56,16 @@ void CCRemoteNotification::reportDiviceToken(const char *divicetoken,CCObject* p
     CCHttpRequest *request = new CCHttpRequest;
     std::string url ="";
     url.append(address);
-    url.append("/service/addDeviceToken/");
+    url.append("/serviceapn/addDeviceToken/");
+    url.append(appID);
+    url.append("/");
     url.append(divicetoken);
     request->setUrl(url.c_str());
     
-    std::string sign = CCCrypto::getInstance()->md5(url.append(token).c_str(),url.append(token).length());
+
+    url.append(secretKey).c_str();
+    std::string sign = CCCrypto::getInstance()->md5(url.c_str(),url.length());
+    
     std::string postData = "";
     postData.append("sign=").append(sign);
     request->setRequestData(postData.c_str(), postData.length());

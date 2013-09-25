@@ -85,14 +85,20 @@ int CCAppStoreIAP::pay(std::string products_id,int quantity,CCObject* pTarget, S
 void CCAppStoreIAP::setupServiceAddress(const char* address){
     this->address = address;
 }
-void CCAppStoreIAP::setupServiceToken(const char *token){
-    this->token = token;
+
+void CCAppStoreIAP::setupSecretKey(const char *secretKey){
+    this->secretKey = secretKey;
 }
+void CCAppStoreIAP::setupAppID(const char *appID){
+    this->appID = appID;
+}
+
 int CCAppStoreIAP::verify(const char* businessID, std::string productIdentifier,std::string receipt,CCObject* pTarget, SEL_CallFuncND pSelector){
     CCHttpRequest *request = new CCHttpRequest ;
     std::string url;
     url.append(address);
-    url.append("/service/iapVerify");
+    url.append("/serviceiap/iapVerify");
+    url.append(appID);
     url.append("/");
     url.append(businessID);
     
@@ -103,8 +109,9 @@ int CCAppStoreIAP::verify(const char* businessID, std::string productIdentifier,
     curl_easy_cleanup(easy_handle);
     request->setUrl(url.c_str());
     
+    url.append(secretKey).c_str();
+    std::string sign = CCCrypto::getInstance()->md5(url.c_str(),url.length());
     
-    std::string sign = CCCrypto::getInstance()->md5(url.append(token).c_str(),url.append(token).length());
     post.append("&sign=").append(sign);
     
     request->setRequestType(CCHttpRequest::kHttpPost);

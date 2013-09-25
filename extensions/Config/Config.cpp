@@ -1,11 +1,3 @@
-//
-//  xGameTools.cpp
-//  Ragnarok Battle Online
-//
-//  Created by xudexin on 13-5-7.
-//
-//
-
 #include "Config.h"
 #include "HttpClient.h"
 #include "Crypto.h"
@@ -34,19 +26,27 @@ CCConfig::~CCConfig(){
 void CCConfig::setupServiceAddress(const char* address){
     this->address = address;
 }
-void CCConfig::setupServiceToken(const char *token){
-    this->token = token;
+void CCConfig::setupSecretKey(const char *secretKey){
+    this->secretKey = secretKey;
+}
+void CCConfig::setupAppID(const char *appID){
+    this->appID = appID;
 }
 
 void CCConfig::getModelConf(const char *model,CCObject* pTarget, SEL_CallFuncND pSelector){
     CCHttpRequest *request = new CCHttpRequest;
     std::string url ="";
     url.append(address);
-    url.append("/service/getModelConf/");
+    url.append("/serviceconf/getModelConf/");
+    url.append(appID);
+    url.append("/");
     url.append(model);
+    
     request->setUrl(url.c_str());
     
-    std::string sign = CCCrypto::getInstance()->md5(url.append(token).c_str(),url.append(token).length());
+    url.append(secretKey).c_str();
+    std::string sign = CCCrypto::getInstance()->md5(url.c_str(),url.length());
+ 
     std::string postData = "";
     postData.append("sign=").append(sign);
     request->setRequestData(postData.c_str(), postData.length());

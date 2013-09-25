@@ -18,8 +18,9 @@ public:
 public:
 
     void setupServiceAddress(const char* address);
-    void setupServiceToken(const char* token);
-    
+    void setupSecretKey(const char* secretKey);
+    void setupAppID(const char* appID);
+
     //  extension::CCHttpResponse *response  = (extension::CCHttpResponse *)data;
     void getModelConf(const char *model,CCObject* pTarget, SEL_CallFuncND pSelector);
     
@@ -28,7 +29,8 @@ public:
     ~CCConfig();
 private:
     std::string address;
-    std::string token;
+    std::string secretKey;
+    std::string appID;
 
 };
 #endif /* defined(__CCConfig__) */

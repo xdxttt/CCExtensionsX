@@ -220,6 +220,7 @@
 		B5C4875A173FDAC4004D24DC /* DeviceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5C48753173FDAC4004D24DC /* DeviceInfo.mm */; };
 		B5C4877C173FDBB6004D24DC /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = B5C4877A173FDBB6004D24DC /* cJSON.c */; };
 		B5C4877E173FDDB2004D24DC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C4877D173FDDB2004D24DC /* StoreKit.framework */; };
+		B5D397F217F1B3BB00D9EAE5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B5D397F117F1B3BB00D9EAE5 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -689,6 +690,7 @@
 		B5C4877A173FDBB6004D24DC /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		B5C4877B173FDBB6004D24DC /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
 		B5C4877D173FDDB2004D24DC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		B5D397F117F1B3BB00D9EAE5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -724,6 +726,7 @@
 		B5C4846F173FDA6D004D24DC = {
 			isa = PBXGroup;
 			children = (
+				B5D397F117F1B3BB00D9EAE5 /* Default-568h@2x.png */,
 				B5C4877D173FDDB2004D24DC /* StoreKit.framework */,
 				B5C4848B173FDA6D004D24DC /* example */,
 				B5C4847A173FDA6D004D24DC /* Frameworks */,
@@ -1732,7 +1735,7 @@
 		B5C48470173FDA6D004D24DC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = B5C48473173FDA6D004D24DC /* Build configuration list for PBXProject "example" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1764,6 +1767,7 @@
 				B5C48498173FDA6D004D24DC /* Icon-Small-50.png in Resources */,
 				B5C4849A173FDA6D004D24DC /* Icon-Small.png in Resources */,
 				B5C4849C173FDA6D004D24DC /* Icon-Small@2x.png in Resources */,
+				B5D397F217F1B3BB00D9EAE5 /* Default-568h@2x.png in Resources */,
 				B5C4849E173FDA6E004D24DC /* Icon.png in Resources */,
 				B5C484A0173FDA6E004D24DC /* Icon@2x.png in Resources */,
 				B5C484A2173FDA6E004D24DC /* iTunesArtwork in Resources */,
@@ -1978,7 +1982,6 @@
 		B5C4873C173FDA74004D24DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2001,6 +2004,7 @@
 					"\"$(PROJECT_NAME)/libs/cocos2dx/platform/ios\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2009,7 +2013,6 @@
 		B5C4873D173FDA74004D24DC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2045,7 +2048,7 @@
 				GCC_PREFIX_HEADER = example/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = example/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/example/libs/cocos2dx/platform/third_party/ios/libraries\"",
@@ -2056,6 +2059,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2069,7 +2073,7 @@
 				GCC_PREFIX_HEADER = example/Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = example/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/example/libs/cocos2dx/platform/third_party/ios/libraries\"",
@@ -2080,6 +2084,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

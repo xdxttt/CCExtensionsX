@@ -34,8 +34,9 @@ public:
     
 public:
     void setupServiceAddress(const char* address);
-    void setupServiceToken(const char* token);
-
+    void setupSecretKey(const char* secretKey);
+    void setupAppID(const char* appID);
+    
     void reportDiviceToken(const char *token,CCObject* pTarget, SEL_CallFuncND pSelector);
     
     //data  -> (char*)token
@@ -50,7 +51,8 @@ public:
     
 private:
     std::string address;
-    std::string token;
+    std::string secretKey;
+    std::string appID;
 };
 
 
