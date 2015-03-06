@@ -8,27 +8,22 @@
 
 #include "APPStoreIAP.h"
 #include "HttpClient.h"
-#include "curl/curl.h"
 #include "Crypto.h"
-
-using namespace cocos2d::extension;
-
 #include "InAppPurchaseManager.h"
-CCAppStoreIAP *s_CCIAP = NULL;
+#include "LoadingHelper.h"
+AppStoreIAP *s_CCIAP = NULL;
 InAppPurchaseManager *s_iapManager = NULL;
+AppStoreIAPContent * s_requestSKProductsContent;
+AppStoreIAPContent * s_purchaseContent;
+
+std::map<void*,AppStoreIAPContent*> notify_content;
 
 
-CCAppStoreIAPContent * s_requestSKProductsContent;
-CCAppStoreIAPContent * s_payContent;
-
-std::map<void*,CCAppStoreIAPContent*> notify_content;
-
-
-CCAppStoreIAP::CCAppStoreIAP(){
+AppStoreIAP::AppStoreIAP(){
 }
-CCAppStoreIAP::~CCAppStoreIAP(){
+AppStoreIAP::~AppStoreIAP(){
 }
-void CCAppStoreIAP::destroyInstance()
+void AppStoreIAP::destroyInstance()
 {
     if (s_CCIAP) {
         s_CCIAP->release();
@@ -39,93 +34,48 @@ void CCAppStoreIAP::destroyInstance()
     }
 }
 
-CCAppStoreIAP* CCAppStoreIAP::getInstance()
+AppStoreIAP* AppStoreIAP::getInstance()
 {
     if (s_CCIAP == NULL) {
-        s_CCIAP = new CCAppStoreIAP();
+        s_CCIAP = new AppStoreIAP();
     }
     if (s_iapManager == NULL) {
         s_iapManager = [InAppPurchaseManager alloc];
     }
     return s_CCIAP;
 }
-int CCAppStoreIAP::requestSKProducts(std::list<std::string> products_ids,CCObject* pTarget, SEL_CallFuncND pSelector){
-    if (s_requestSKProductsContent ==NULL) {
-        s_requestSKProductsContent = new CCAppStoreIAPContent;
-        s_requestSKProductsContent->pTarget = pTarget;
-        s_requestSKProductsContent->pSelector = pSelector;
-    }else{
-        return 1;
-    }
-    
+void AppStoreIAP::requestSKProducts(std::list<std::string> products_ids,Ref* pTarget, SEL_CallFuncND pSelector){
+
     NSMutableArray *mutablearray = [[NSMutableArray alloc] initWithCapacity:products_ids.size()];
     for (std::list<std::string>::iterator iter = products_ids.begin(); iter!=products_ids.end(); iter++) {
         NSString*products_id = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [mutablearray addObject:products_id];
     }
     NSSet *productIdentifiers  = [[NSSet alloc] initWithArray:mutablearray];
+    
+    if (s_requestSKProductsContent ==NULL) {
+        s_requestSKProductsContent = new AppStoreIAPContent;
+        s_requestSKProductsContent->pTarget = pTarget;
+        s_requestSKProductsContent->pSelector = pSelector;
+    }
+    
     [s_iapManager requestSKProducts:productIdentifiers];
-    return 0;
+    
 }
 
-int CCAppStoreIAP::pay(std::string products_id,int quantity,CCObject* pTarget, SEL_CallFuncND pSelector){
-
-    if (s_payContent ==NULL) {
-        s_payContent = new CCAppStoreIAPContent;
-        s_payContent->pTarget = pTarget;
-        s_payContent->pSelector = pSelector;
+void AppStoreIAP::purchase(std::string products_id,int quantity,Ref* pTarget, SEL_CallFuncND pSelector){
+    if (s_purchaseContent ==NULL) {
+        s_purchaseContent = new AppStoreIAPContent;
+        s_purchaseContent->pTarget = pTarget;
+        s_purchaseContent->pSelector = pSelector;
     }
 
     NSString *pid = [[NSString alloc] initWithCString:products_id.c_str() encoding:NSUTF8StringEncoding];
-    [s_iapManager pay:pid Quantity:quantity];
-
-    return 0;
+    [s_iapManager purchase:pid Quantity:quantity];
 }
 
-void CCAppStoreIAP::setupServiceAddress(const char* address){
-    this->address = address;
-}
-
-void CCAppStoreIAP::setupSecretKey(const char *secretKey){
-    this->secretKey = secretKey;
-}
-void CCAppStoreIAP::setupAppID(const char *appID){
-    this->appID = appID;
-}
-
-int CCAppStoreIAP::verify(const char* businessID, std::string productIdentifier,std::string receipt,CCObject* pTarget, SEL_CallFuncND pSelector){
-    CCHttpRequest *request = new CCHttpRequest ;
-    std::string url;
-    url.append(address);
-    url.append("/serviceiap/iapVerify");
-    url.append(appID);
-    url.append("/");
-    url.append(businessID);
-    
-    std::string post;
-    CURL *easy_handle = curl_easy_init();
-    char *base64data = curl_easy_escape(easy_handle, receipt.c_str(), receipt.length());
-    post.append("receipt=").append(base64data);
-    curl_easy_cleanup(easy_handle);
-    request->setUrl(url.c_str());
-    
-    url.append(secretKey).c_str();
-    std::string sign = CCCrypto::getInstance()->md5(url.c_str(),url.length());
-    
-    post.append("&sign=").append(sign);
-    
-    request->setRequestType(CCHttpRequest::kHttpPost);
-
-    request->setRequestData(post.c_str(), post.length());
-    request->setResponseCallback(pTarget, pSelector);
-    
-    CCHttpClient::getInstance()->send(request);
-    return 0;
-}
-int CCAppStoreIAP::completeTransaction(std::string transactionIdentifier){
- 
-    NSString*strtid = [[NSString alloc] initWithCString:transactionIdentifier.c_str() encoding:NSUTF8StringEncoding];
+void AppStoreIAP::completeTransaction(std::string transactionIdentifier){
+     NSString*strtid = [[NSString alloc] initWithCString:transactionIdentifier.c_str() encoding:NSUTF8StringEncoding];
     [s_iapManager completeTransaction:strtid];
-    return 0;
 }
 

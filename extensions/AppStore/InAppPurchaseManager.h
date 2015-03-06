@@ -18,12 +18,13 @@
 }
 - (BOOL) canMakePayments;
 
-- (void) needServerVerify:(BOOL)isNeed;
-
 - (void) requestSKProducts:(NSSet *)productId;
 
-- (void) pay:(NSString *)productId Quantity:(NSInteger)quantity;
+- (void) purchase:(NSString *)productId Quantity:(NSInteger)quantity;
+
 - (void) completeTransaction:(NSString *)transactionIdentifier;
+
+@property (nonatomic, assign) NSArray *products;
 
 @end
 #endif /* defined(__InAppPurchaseManager__) */

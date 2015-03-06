@@ -14,14 +14,14 @@
 
 using namespace cocos2d;
 
-class CCCrypto :public cocos2d::CCObject{
+class Crypto :public cocos2d::Ref{
 public:
-    static CCCrypto *getInstance();
+    static Crypto *getInstance();
     static void destroyInstance();
     std::string md5(const char *src,int len);
 
 public:
-    CCCrypto();
-    ~CCCrypto();
+    Crypto();
+    ~Crypto();
 };
 #endif /* defined(__Crypto__) */

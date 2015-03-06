@@ -8,27 +8,27 @@
 #include "Crypto.h"
 #include "md5.h"
 
-CCCrypto* sCCCrypto = NULL;
+Crypto* sCrypto = NULL;
 
-CCCrypto *CCCrypto::getInstance(){
-    if (sCCCrypto==NULL) {
-        sCCCrypto = new CCCrypto;
+Crypto *Crypto::getInstance(){
+    if (sCrypto==NULL) {
+        sCrypto = new Crypto;
     }
-    return sCCCrypto;
+    return sCrypto;
 }
-void CCCrypto::destroyInstance(){
-    if (sCCCrypto) {
-        delete sCCCrypto;
+void Crypto::destroyInstance(){
+    if (sCrypto) {
+        delete sCrypto;
     }
 }
-CCCrypto::CCCrypto(){
+Crypto::Crypto(){
     
 }
-CCCrypto::~CCCrypto(){
+Crypto::~Crypto(){
     
 }
 
-std::string CCCrypto::md5(const char *src, int len){
+std::string Crypto::md5(const char *src, int len){
     unsigned char output[256]={0};
     std::string ret;
     

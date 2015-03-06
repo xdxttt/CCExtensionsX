@@ -1,33 +1,32 @@
 //
-//  CCAppStoreIAP.h
+//  AppStoreIAP.h
 //
 //
 
-#ifndef __CCAppStoreIAP__
-#define __CCAppStoreIAP__
+#ifndef __AppStoreIAP__
+#define __AppStoreIAP__
 #include "cocos2d.h"
 #include <list>
 using namespace cocos2d;
 
-class CCAppStoreIAPContent {
+class AppStoreIAPContent {
 public:
-    CCAppStoreIAPContent(){
+    AppStoreIAPContent(){
         pTarget = NULL;
         pSelector = NULL;
     }
-    ~CCAppStoreIAPContent(){
+    ~AppStoreIAPContent(){
         
     }
-    CCObject* pTarget;
-    
+    Ref* pTarget;
     SEL_CallFuncND pSelector;
 };
 
 
-class CCAppStoreProducts {
+class AppStoreProducts {
 public:
-    CCAppStoreProducts(){}
-    ~CCAppStoreProducts(){}
+    AppStoreProducts(){}
+    ~AppStoreProducts(){}
     
     std::string localizedDescription;
     
@@ -38,35 +37,36 @@ public:
     double price;
     
     std::string productIdentifier;
+    
 };
 
 enum {
-    CCAppStorePaymentTransactionStatePurchasing,    // Transaction is being added to the server queue.
-    CCAppStorePaymentTransactionStatePurchased,     // Transaction is in queue, user has been charged.  Client should complete the transaction.
-    CCAppStorePaymentTransactionStateFailed,        // Transaction was cancelled or failed before being added to the server queue.
-    CCAppStorePaymentTransactionStateRestored       // Transaction was restored from user's purchase history.  Client should complete the transaction.
+    AppStorePaymentTransactionStatePurchasing,    // Transaction is being added to the server queue.
+    AppStorePaymentTransactionStatePurchased,     // Transaction is in queue, user has been charged.  Client should complete the transaction.
+    AppStorePaymentTransactionStateFailed,        // Transaction was cancelled or failed before being added to the server queue.
+    AppStorePaymentTransactionStateRestored       // Transaction was restored from user's purchase history.  Client should complete the transaction.
 };
 
-class CCAppStorePayment {
+class AppStorePayment {
 public:
-    CCAppStorePayment(){
+    AppStorePayment(){
         requestData = NULL;
     }
-    ~CCAppStorePayment(){}
+    ~AppStorePayment(){}
     
     std::string productIdentifier;
     
     unsigned char* requestData;
     
-    int quantity;
+    long quantity;
 };
-class CCAppStorePaymentTransaction {
+class AppStorePaymentTransaction {
 public:
-    CCAppStorePaymentTransaction(){
+    AppStorePaymentTransaction(){
         transactionReceipt = NULL;
         transactionDate = NULL;
     }
-    ~CCAppStorePaymentTransaction(){}
+    ~AppStorePaymentTransaction(){}
     
     int transactionState;
     
@@ -78,15 +78,15 @@ public:
 
     std::string error;
   
-    CCAppStorePayment payment;
+    AppStorePayment payment;
     
     //NSArray *downloads;
 };
-class CCAppStoreReceipt{
-    CCAppStoreReceipt(){
+class AppStoreReceipt{
+    AppStoreReceipt(){
         
     }
-    ~CCAppStoreReceipt(){}
+    ~AppStoreReceipt(){}
     std::string original_purchase_date_pst;
     int purchase_date_ms;
     std::string unique_identifier;
@@ -102,39 +102,30 @@ class CCAppStoreReceipt{
     std::string bid;
 };
 
-class CCAppStorePurchaseContent {
-    CCAppStorePurchaseContent(){
+class AppStorePurchaseContent {
+    AppStorePurchaseContent(){
  
     }
-    ~CCAppStorePurchaseContent(){}
+    ~AppStorePurchaseContent(){}
 };
 
 
-class CCAppStoreIAP :public cocos2d::CCObject{
+class AppStoreIAP :public cocos2d::Ref{
 public:
-    static CCAppStoreIAP *getInstance();
+    static AppStoreIAP *getInstance();
     static void destroyInstance();
 public:
-    CCAppStoreIAP();
-    ~CCAppStoreIAP();
-
-    void setupServiceAddress(const char* address);
-    void setupSecretKey(const char* secretKey);
-    void setupAppID(const char* appID);
-    
-    //  std::list<CCAppStoreProducts*>* list =(std::list<CCAppStoreProducts*>*)data;
-    int requestSKProducts(std::list<std::string> products_ids,CCObject* pTarget, SEL_CallFuncND pSelector);
-    
-    //  std::list<CCAppStorePaymentTransaction*>* list =(std::list<CCAppStorePaymentTransaction*>*)data;
-    int pay(std::string products_id,int quantity,CCObject* pTarget, SEL_CallFuncND pSelector);
+    AppStoreIAP();
+    ~AppStoreIAP();
+    //  std::list<AppStoreProducts*>* list =(std::list<AppStoreProducts*>*)data;
+    void requestSKProducts(std::list<std::string> products_ids,Ref* pTarget, SEL_CallFuncND pSelector);
+    //  std::list<AppStorePaymentTransaction*>* list =(std::list<AppStorePaymentTransaction*>*)data;
+    void purchase(std::string products_id,int quantity,Ref* pTarget, SEL_CallFuncND pSelector);
    
-    //  extension::CCHttpResponse *response  = (extension::CCHttpResponse *)data;
-    int verify(const char* businessID, std::string productIdentifier,std::string receipt,CCObject* pTarget, SEL_CallFuncND pSelector);
-    
-    int completeTransaction(std::string transactionIdentifier);
+    void completeTransaction(std::string transactionIdentifier);
 private:
     std::string address;
     std::string secretKey;
     std::string appID;
 };
-#endif /* defined(__CCAppStoreIAP__) */
+#endif /* defined(__AppStoreIAP__) */
