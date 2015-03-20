@@ -36,6 +36,14 @@ extern AppStoreIAPContent * s_purchaseContent;
         item->productIdentifier = [skProduct.productIdentifier UTF8String];
         item->localizedDescription = [skProduct.localizedDescription UTF8String];
         item->price = [skProduct.price doubleValue];
+        
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        [numberFormatter setLocale:skProduct.priceLocale];
+        NSString *formattedPrice = [numberFormatter stringFromNumber:skProduct.price];
+        item->priceLocale = [formattedPrice UTF8String];
+        
         list.push_back(item);
     }
     for (NSString *invalidProductId in response.invalidProductIdentifiers)
