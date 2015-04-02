@@ -14,9 +14,9 @@ extern AppStoreIAPContent * s_purchaseContent;
 #pragma mark -
 #pragma mark SKProductsRequestDelegate methods
 
-- (void) requestSKProducts:(NSSet *)productId
+- (void) requestSKProducts:(NSSet *)productIds
 {
-    SKProductsRequest* productsRequest = [[SKProductsRequest alloc]initWithProductIdentifiers:productId];
+    SKProductsRequest* productsRequest = [[SKProductsRequest alloc]initWithProductIdentifiers:productIds];
     [productsRequest setDelegate:self];
     [productsRequest start];
 }
@@ -24,6 +24,11 @@ extern AppStoreIAPContent * s_purchaseContent;
 {
     return [SKPaymentQueue canMakePayments];
 }
+- (void)restorePurchase{
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+}
+
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
     _products = [response.products retain];
@@ -88,6 +93,7 @@ extern AppStoreIAPContent * s_purchaseContent;
             product = item;
         }
     }
+    
     SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
     [payment setQuantity:quantity];
     [[SKPaymentQueue defaultQueue] addPayment:payment];

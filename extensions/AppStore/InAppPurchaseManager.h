@@ -18,7 +18,9 @@
 }
 - (BOOL) canMakePayments;
 
-- (void) requestSKProducts:(NSSet *)productId;
+- (void) restorePurchase;
+
+- (void) requestSKProducts:(NSSet *)productIds;
 
 - (void) purchase:(NSString *)productId Quantity:(NSInteger)quantity;
 

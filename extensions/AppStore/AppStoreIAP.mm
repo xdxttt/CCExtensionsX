@@ -58,9 +58,7 @@ void AppStoreIAP::requestSKProducts(std::list<std::string> products_ids,Ref* pTa
         s_requestSKProductsContent->pTarget = pTarget;
         s_requestSKProductsContent->pSelector = pSelector;
     }
-    
     [s_iapManager requestSKProducts:productIdentifiers];
-    
 }
 
 void AppStoreIAP::purchase(std::string products_id,int quantity,Ref* pTarget, SEL_CallFuncND pSelector){
@@ -69,10 +67,18 @@ void AppStoreIAP::purchase(std::string products_id,int quantity,Ref* pTarget, SE
         s_purchaseContent->pTarget = pTarget;
         s_purchaseContent->pSelector = pSelector;
     }
-
     NSString *pid = [[NSString alloc] initWithCString:products_id.c_str() encoding:NSUTF8StringEncoding];
     [s_iapManager purchase:pid Quantity:quantity];
 }
+void AppStoreIAP::restorePurchase(Ref* pTarget, SEL_CallFuncND pSelector){
+    if (s_purchaseContent ==NULL) {
+        s_purchaseContent = new AppStoreIAPContent;
+        s_purchaseContent->pTarget = pTarget;
+        s_purchaseContent->pSelector = pSelector;
+    }
+    [s_iapManager restorePurchase];
+}
+
 
 void AppStoreIAP::completeTransaction(std::string transactionIdentifier){
      NSString*strtid = [[NSString alloc] initWithCString:transactionIdentifier.c_str() encoding:NSUTF8StringEncoding];

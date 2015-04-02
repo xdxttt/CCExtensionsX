@@ -121,7 +121,9 @@ public:
     void requestSKProducts(std::list<std::string> products_ids,Ref* pTarget, SEL_CallFuncND pSelector);
     //  std::list<AppStorePaymentTransaction*>* list =(std::list<AppStorePaymentTransaction*>*)data;
     void purchase(std::string products_id,int quantity,Ref* pTarget, SEL_CallFuncND pSelector);
-   
+    //  std::list<AppStorePaymentTransaction*>* list =(std::list<AppStorePaymentTransaction*>*)data;
+    void restorePurchase(Ref* pTarget, SEL_CallFuncND pSelector);
+
     void completeTransaction(std::string transactionIdentifier);
 private:
     std::string address;
