@@ -5,21 +5,14 @@
 //
 //
 
-#import "InAppPurchaseManager.h"
-#include "APPStoreIAP.h"
+#import "SKPaymentTransactionObserverImp.h"
+#include "SKPaymentQueueWraper.h"
 
-extern AppStoreIAPContent * s_requestSKProductsContent;
-extern AppStoreIAPContent * s_purchaseContent;
-@implementation InAppPurchaseManager
+extern UpdatedTransactionsCallBack s_UpdatedTransactionsCallBack;
+@implementation SKPaymentTransactionObserverImp
 #pragma mark -
-#pragma mark SKProductsRequestDelegate methods
+#pragma mark SKPaymentTransactionObserver methods
 
-- (void) requestSKProducts:(NSSet *)productIds
-{
-    SKProductsRequest* productsRequest = [[SKProductsRequest alloc]initWithProductIdentifiers:productIds];
-    [productsRequest setDelegate:self];
-    [productsRequest start];
-}
 - (BOOL) canMakePayments
 {
     return [SKPaymentQueue canMakePayments];
@@ -29,46 +22,6 @@ extern AppStoreIAPContent * s_purchaseContent;
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 }
 
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
-{
-    _products = [response.products retain];
-    std::list<AppStoreProducts*> list;
-    for (int index = 0; index < [response.products count]; index++) {
-        SKProduct *skProduct = [response.products objectAtIndex:index];
-        AppStoreProducts*item = new AppStoreProducts;
-        item->localizedDescription = [skProduct.localizedDescription UTF8String];
-        item->localizedTitle = [skProduct.localizedTitle UTF8String];
-        item->productIdentifier = [skProduct.productIdentifier UTF8String];
-        item->localizedDescription = [skProduct.localizedDescription UTF8String];
-        item->price = [skProduct.price doubleValue];
-        
-        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-        [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-        [numberFormatter setLocale:skProduct.priceLocale];
-        NSString *formattedPrice = [numberFormatter stringFromNumber:skProduct.price];
-        item->priceLocale = [formattedPrice UTF8String];
-        
-        list.push_back(item);
-    }
-    for (NSString *invalidProductId in response.invalidProductIdentifiers)
-    {
-        NSLog(@"Invalid product id: %@" , invalidProductId);
-    }
-    if(s_requestSKProductsContent){
-        Ref *pTarget = s_requestSKProductsContent->pTarget;
-        SEL_CallFuncND pSelector =s_requestSKProductsContent->pSelector;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)(NULL,&list);
-        }
-        delete s_requestSKProductsContent;
-        s_requestSKProductsContent = NULL;
-    }
-    for (std::list<AppStoreProducts*>::iterator iter = list.begin(); iter!=list.end(); iter++) {
-        delete *iter;
-    }
-}
 - (void) completeTransaction:(NSString *)transactionIdentifier
 {
     for (SKPaymentTransaction* transaction in [[SKPaymentQueue defaultQueue] transactions])
@@ -93,7 +46,6 @@ extern AppStoreIAPContent * s_purchaseContent;
             product = item;
         }
     }
-    
     SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
     [payment setQuantity:quantity];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
@@ -101,10 +53,10 @@ extern AppStoreIAPContent * s_purchaseContent;
 }
 - (void) paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
-    std::list<AppStorePaymentTransaction*> list;
+    std::list<SKPaymentTransactionWraper*> list;
     for (SKPaymentTransaction* transaction in transactions)
     {
-        AppStorePaymentTransaction* item = new AppStorePaymentTransaction;
+        SKPaymentTransactionWraper* item = new SKPaymentTransactionWraper;
         item->transactionState = transaction.transactionState;
         if (transaction.transactionIdentifier) {
             item->transactionIdentifier = [transaction.transactionIdentifier UTF8String];
@@ -127,16 +79,10 @@ extern AppStoreIAPContent * s_purchaseContent;
         }
         list.push_back(item);
     }
-    if(s_purchaseContent){
-        Ref *pTarget = s_purchaseContent->pTarget;
-        SEL_CallFuncND pSelector =s_purchaseContent->pSelector;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)(NULL,&list);
-        }
+    if(s_UpdatedTransactionsCallBack){
+        s_UpdatedTransactionsCallBack(list);
     }
-    
-    for (std::list<AppStorePaymentTransaction*>::iterator iter = list.begin(); iter!=list.end(); iter++) {
+    for (std::list<SKPaymentTransactionWraper*>::iterator iter = list.begin(); iter!=list.end(); iter++) {
         delete *iter;
     }
 }
