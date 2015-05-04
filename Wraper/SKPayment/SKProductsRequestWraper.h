@@ -1,8 +1,4 @@
 #pragma once
-#include "cocos2d.h"
-#include <list>
-using namespace cocos2d;
-
 class SKProductWraper {
 public:
     SKProductWraper(){}
@@ -15,7 +11,7 @@ public:
 };
 typedef std::function<void(std::list<SKProductWraper*> products)> RequestSKProductsCallback;
 
-class SKProductsRequestWraper :public cocos2d::Ref{
+class SKProductsRequestWraper{
 public:
     static SKProductsRequestWraper *getInstance();
     static void destroyInstance();

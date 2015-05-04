@@ -7,11 +7,7 @@
 //
 
 #include "SKPaymentQueueWraper.h"
-#include "HttpClient.h"
-#include "Crypto.h"
 #include "SKPaymentTransactionObserverImp.h"
-
-#include "LoadingHelper.h"
 SKPaymentQueueWraper *s_SKPaymentQueueWraper = NULL;
 SKPaymentTransactionObserverImp *s_SKPaymentTransactionObserverImp = NULL;
 UpdatedTransactionsCallBack s_UpdatedTransactionsCallBack;
@@ -23,7 +19,7 @@ SKPaymentQueueWraper::~SKPaymentQueueWraper(){
 void SKPaymentQueueWraper::destroyInstance()
 {
     if (s_SKPaymentQueueWraper) {
-        s_SKPaymentQueueWraper->release();
+        delete s_SKPaymentQueueWraper;
     }
     if (s_SKPaymentTransactionObserverImp) {
         [s_SKPaymentTransactionObserverImp release];

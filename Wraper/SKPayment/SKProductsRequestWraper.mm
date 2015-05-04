@@ -1,17 +1,5 @@
-//
-//  CCIAP.cpp
-//  Ragnarok Battle Online
-//
-//  Created by xudexin on 13-4-26.
-//
-//
-
 #include "SKProductsRequestWraper.h"
-#include "HttpClient.h"
-#include "Crypto.h"
 #include "SKProductsRequestDelegateImp.h"
-
-#include "LoadingHelper.h"
 SKProductsRequestWraper *s_SKProductsRequestWraper = NULL;
 SKProductsRequestDelegateImp *s_SKProductsRequestDelegateImp = NULL;
 RequestSKProductsCallback s_RequestSKProductsCallback = NULL;
@@ -23,7 +11,7 @@ SKProductsRequestWraper::~SKProductsRequestWraper(){
 void SKProductsRequestWraper::destroyInstance()
 {
     if (s_SKProductsRequestWraper) {
-        s_SKProductsRequestWraper->release();
+       delete s_SKProductsRequestWraper;
     }
     if (s_SKProductsRequestDelegateImp) {
         [s_SKProductsRequestDelegateImp release];

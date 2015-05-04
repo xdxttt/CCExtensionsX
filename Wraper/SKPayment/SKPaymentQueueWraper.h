@@ -1,12 +1,10 @@
 #pragma once
-#include "cocos2d.h"
 #include <list>
-using namespace cocos2d;
 enum {
     AppStorePaymentTransactionStatePurchasing,    // Transaction is being added to the server queue.
     AppStorePaymentTransactionStatePurchased,     // Transaction is in queue, user has been charged.  Client should complete the transaction.
     AppStorePaymentTransactionStateFailed,        // Transaction was cancelled or failed before being added to the server queue.
-    AppStorePaymentTransactionStateRestored       // Transaction was restored from user's purchase history.  Client should complete the transaction.
+    AppStorePaymentTransactionStateRestored       // Transaction was restored from user's purchase history.  Client should complete the
 };
 
 class SKPaymentWraper {
@@ -69,7 +67,7 @@ class AppStorePurchaseContent {
 };
 
 typedef std::function<void(std::list<SKPaymentTransactionWraper*> appStorePaymentTransactions)> UpdatedTransactionsCallBack;
-class SKPaymentQueueWraper :public cocos2d::Ref{
+class SKPaymentQueueWraper{
 public:
     static SKPaymentQueueWraper *getInstance();
     static void destroyInstance();
