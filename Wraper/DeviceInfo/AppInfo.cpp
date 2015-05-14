@@ -10,7 +10,7 @@ std::string AppInfo::getVersion()
 	return "0000";
 }
 
-std::string CCAppInfo::getBuild()
+std::string AppInfo::getBuild()
 {
 	return "Win32 Dev";
 }

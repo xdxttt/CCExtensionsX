@@ -1,4 +1,3 @@
-#include "CCDeviceInfo.h"
 #include "cocos2d.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <windows.h> 

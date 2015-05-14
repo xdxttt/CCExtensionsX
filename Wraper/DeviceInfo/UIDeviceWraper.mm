@@ -1,5 +1,4 @@
 #include "UIDeviceWraper.h"
-#include "OpenUDID.h"
 #include <AdSupport/AdSupport.h>
 UIDeviceWraper::UIDeviceWraper(void) {
 }
@@ -13,7 +12,7 @@ std::string  UIDeviceWraper::getUUID(){
 }
    
 std::string UIDeviceWraper::getUDID() {
-        NSString* udid = [OpenUDID value];
+        NSString* udid ;//= [OpenUDID value];
         UIDevice *device_=[[UIDevice alloc] init];
         if([device_.systemVersion  floatValue]>=6.0f){
             udid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
