@@ -1,13 +1,6 @@
 #pragma once
+#include "NSErrorWraper.h"
 
-class NSErrorWraper{
-public:
-    NSErrorWraper(){}
-    ~NSErrorWraper(){}
-    long code;
-    std::string domain;
-    //NSDictionary *_userInfo;
-};
 class GKPlayerWraper{
 public:
     GKPlayerWraper();
