@@ -33,4 +33,6 @@ public:
     static FBSDKLoginManagerWraper *getInstance();
     static void destroyInstance();
     void logInWithReadPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd);
+    void logInWithPublishPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd);
+    
 };
