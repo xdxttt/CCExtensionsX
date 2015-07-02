@@ -1,6 +1,21 @@
 #pragma once
 #include <set>
 #include "NSErrorWraper.h"
+
+class FBSDKProfileWraper{
+public:
+    FBSDKProfileWraper(){};
+    ~FBSDKProfileWraper(){};
+    static FBSDKProfileWraper* currentProfile();
+    std::string userID;
+    std::string firstName;
+    std::string middleName;
+    std::string lastName;
+    std::string name;
+    static void enableUpdatesOnAccessTokenChange(bool enable);
+};
+
+
 class FBSDKAccessTokenWraper{
 public:
     FBSDKAccessTokenWraper(){};

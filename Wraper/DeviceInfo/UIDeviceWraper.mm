@@ -1,4 +1,8 @@
 #include "UIDeviceWraper.h"
+
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+
 #include <AdSupport/AdSupport.h>
 UIDeviceWraper::UIDeviceWraper(void) {
 }
@@ -12,7 +16,13 @@ std::string  UIDeviceWraper::getUUID(){
 }
    
 std::string UIDeviceWraper::getUDID() {
-        NSString* udid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    NSString* udid = NULL;
+        if([[[UIDevice currentDevice] systemVersion] floatValue] >=6.0f){
+            udid = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+        }else{
+            CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+            udid =(NSString *)CFUUIDCreateString (kCFAllocatorDefault,uuidRef);
+        }
         return [udid cStringUsingEncoding: NSUTF8StringEncoding];
 }
 
@@ -41,6 +51,7 @@ std::string  UIDeviceWraper::getSystemVersion(){
 }
 
 
+#endif
 
 
 

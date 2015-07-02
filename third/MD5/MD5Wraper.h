@@ -1,3 +1,3 @@
 #pragma once
 
-std::string MD5(const char *src, size_t len);
+const char * MD5(const char *src, unsigned long len);

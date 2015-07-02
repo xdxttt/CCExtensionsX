@@ -33,17 +33,24 @@ GKLocalPlayerWraper* GKLocalPlayerWraper::getInstance()
 }
 void GKLocalPlayerWraper::authenticateWithCompletionHandler(const AuthenticateWithCompletionHandler &hd){
     s_AuthenticateWithCompletionHandler = hd;
+    
+    if ([[GKLocalPlayer class] instancesRespondToSelector:@selector(setAuthenticateHandler:)]) {
+        [[GKLocalPlayer localPlayer] setAuthenticateHandler:^(UIViewController *gameCenterLoginViewController, NSError *error) {
+            
+        }];
+    } else { // alternative for iOS < 6
         [s_localPlayer authenticateWithCompletionHandler:^(NSError *error){
-        if (error == nil) {
-            m_localPlayer.alias = [[GKLocalPlayer localPlayer].alias cStringUsingEncoding:NSUTF8StringEncoding];
-            m_localPlayer.playerID = [[GKLocalPlayer localPlayer].playerID cStringUsingEncoding:NSUTF8StringEncoding];
-            m_localPlayer.authenticated = [GKLocalPlayer localPlayer].authenticated;
-            s_AuthenticateWithCompletionHandler(NULL);
-        }else {
-            NSErrorWraper err;
-            err.code = [error code];
-            err.domain = [[error domain] cStringUsingEncoding:NSUTF8StringEncoding];
-            s_AuthenticateWithCompletionHandler(&err);
-        }
-    }];
+            if (error == nil) {
+                m_localPlayer.alias = [[GKLocalPlayer localPlayer].alias cStringUsingEncoding:NSUTF8StringEncoding];
+                m_localPlayer.playerID = [[GKLocalPlayer localPlayer].playerID cStringUsingEncoding:NSUTF8StringEncoding];
+                m_localPlayer.authenticated = [GKLocalPlayer localPlayer].authenticated;
+                s_AuthenticateWithCompletionHandler(NULL);
+            }else {
+                NSErrorWraper err;
+                err.code = [error code];
+                err.domain = [[error domain] cStringUsingEncoding:NSUTF8StringEncoding];
+                s_AuthenticateWithCompletionHandler(&err);
+            }
+        }];
+    }
 }

@@ -9,7 +9,6 @@
 #include "RemoteNotification.h"
 #import <UIKit/UIKit.h>
 #include "HttpClient.h"
-#include "Crypto.h"
 #import "AppController.h"
 
 using namespace cocos2d::extension;

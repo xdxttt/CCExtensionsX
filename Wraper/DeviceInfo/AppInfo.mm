@@ -1,5 +1,5 @@
 #include "AppInfo.h"
-
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 AppInfo::AppInfo(void) {
 }
 
@@ -15,3 +15,4 @@ std::string AppInfo::getBuild() {
     NSString *build = [infoDictionary objectForKey:@"CFBundleVersion"];
     return [build cStringUsingEncoding: NSUTF8StringEncoding];
 }
+#endif

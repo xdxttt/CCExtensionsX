@@ -8,7 +8,8 @@
 
 #include "MD5Wraper.h"
 #include "md5.h"
-std::string MD5(const char *src, size_t len){
+#include <string>
+const char *MD5(const char *src, unsigned long len){
     unsigned char output[256]={0};
     std::string ret;
     MD5_CTX ctx;
@@ -20,5 +21,5 @@ std::string MD5(const char *src, size_t len){
         sprintf(temp,"%02x",output[i]);
         ret.append(temp);
     }
-    return ret;
+    return ret.c_str();
 }

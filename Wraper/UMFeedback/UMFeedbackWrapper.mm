@@ -8,7 +8,6 @@
 
 #include "UMFeedbackWrapper.h"
 #import <UMFeedback.h>
-
 UMFeedbackWrapper*s_UMFeedbackWrapper = NULL;
 
 UMFeedbackWrapper::UMFeedbackWrapper(){

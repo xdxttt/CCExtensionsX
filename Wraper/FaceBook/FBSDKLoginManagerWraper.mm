@@ -14,6 +14,37 @@ FBSDKLoginManagerWraper*s_FBSDKLoginManagerWraper = NULL;
 FBSDKLoginManager *s_FBSDKLoginManager = NULL;
 LogInWithReadPermissionsHandler s_LogInWithReadPermissionsHandler;
 FBSDKAccessTokenWraper* s_tokenWraper = NULL;
+FBSDKProfileWraper *s_FBSDKProfileWraper = NULL;
+
+FBSDKProfileWraper* FBSDKProfileWraper::currentProfile(){
+    FBSDKProfile * profile = [FBSDKProfile currentProfile];
+    if (profile) {
+        if (s_FBSDKProfileWraper==NULL) {
+            s_FBSDKProfileWraper = new FBSDKProfileWraper();
+        }
+        if (profile.userID) {
+            s_FBSDKProfileWraper->userID = [profile.userID cStringUsingEncoding:NSUTF8StringEncoding];
+        }
+        if (profile.firstName) {
+            s_FBSDKProfileWraper->firstName = [profile.firstName cStringUsingEncoding:NSUTF8StringEncoding];
+        }
+        if (profile.middleName) {
+            s_FBSDKProfileWraper->middleName = [profile.middleName cStringUsingEncoding:NSUTF8StringEncoding];
+        }
+        if (profile.lastName) {
+            s_FBSDKProfileWraper->lastName = [profile.lastName cStringUsingEncoding:NSUTF8StringEncoding];
+        }
+        if (profile.name) {
+            s_FBSDKProfileWraper->name = [profile.name cStringUsingEncoding:NSUTF8StringEncoding];
+        }
+        return s_FBSDKProfileWraper;
+    }else{
+        return  NULL;
+    }
+}
+void FBSDKProfileWraper::enableUpdatesOnAccessTokenChange(bool enable){
+    [FBSDKProfile enableUpdatesOnAccessTokenChange:(BOOL)enable];
+}
 
 FBSDKAccessTokenWraper* FBSDKAccessTokenWraper::currentAccessToken(){
     FBSDKAccessToken* token = [FBSDKAccessToken currentAccessToken];
@@ -60,7 +91,6 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
         NSString*permission = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [permissionsArray addObject:permission];
     }
-    
     [s_FBSDKLoginManager logInWithPublishPermissions:permissionsArray handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         NSErrorWraper *err = NULL;
         FBSDKLoginManagerLoginResultWraper* resultWraper = NULL;
