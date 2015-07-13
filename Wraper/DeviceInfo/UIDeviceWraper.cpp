@@ -1,7 +1,9 @@
 #include "UIDeviceWraper.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "cocos2d.h"
+#include "cocos/platform/android/jni/JniHelper.h"
+#include <jni.h>
 
-#if(CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-//TODO Add Android And WinPhone
 UIDeviceWraper::UIDeviceWraper(void) {
 }
 
@@ -10,50 +12,134 @@ UIDeviceWraper::~UIDeviceWraper(void) {
 }
 
 std::string  UIDeviceWraper::getUUID(){
-    char temp[128]={0};
-    long seconds= time((time_t*)NULL);
-    sprintf(temp,"AD%ld/n",seconds);
-    return temp;
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getUUID"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowUUID");
 }
 
 std::string UIDeviceWraper::getUDID() {
-    try{
-        android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
-        .getSystemService(Context.TELEPHONY_SERVICE);
-        String device_id = tm.getDeviceId();
-        android.net.wifi.WifiManager wifi = (android.net.wifi.WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        String mac = wifi.getConnectionInfo().getMacAddress();
-        if( TextUtils.isEmpty(device_id) ){
-            device_id = mac;
-        }
-        if( TextUtils.isEmpty(device_id) ){
-            device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),android.provider.Settings.Secure.ANDROID_ID);
-        }
-        return device_id.toString();
-    }catch(Exception e){
-        e.printStackTrace();
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                               , "getUDID"
+                                               , "()Ljava/lang/String;"))
+    {
+                jstring jstr = NULL;
+                jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+                char* cstr = NULL;
+                cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+                std::string ret(cstr);
+                t.env->ReleaseStringUTFChars(jstr, cstr);
+                t.env->DeleteLocalRef(jstr);
+                return ret.c_str();
     }
-}
+    return std::string("UnknowUDID");
+ }
 
 std::string UIDeviceWraper::getName(){
-    char temp[128]={0};
-    long seconds= time((time_t*)NULL);
-    sprintf(temp,"AD%ld/n",seconds);
-    return temp;
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getName"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowName");
 }
 std::string  UIDeviceWraper::getModel(){
-  return "androidModel";
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getModel"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowModel");
 }
 
 std::string  UIDeviceWraper::getLocalizedModel(){
-    return "androidLocalized";
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getLocalizedModel"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowModel");
 }
 
 std::string  UIDeviceWraper::getSystemName(){
-    return "andrido";
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getSystemName"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowSystemName");
 }
 
 std::string  UIDeviceWraper::getSystemVersion(){
-    return "andrido";
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "getSystemVersion"
+                                       , "()Ljava/lang/String;"))
+    {
+        jstring jstr = NULL;
+        jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        char* cstr = NULL;
+        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
+        std::string ret(cstr);
+        t.env->ReleaseStringUTFChars(jstr, cstr);
+        t.env->DeleteLocalRef(jstr);
+        return ret.c_str();
+    }
+    return std::string("UnknowSystemVersion");
 }
 #endif
