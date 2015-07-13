@@ -4,7 +4,6 @@ class UIDeviceWraper {
 public:
 	UIDeviceWraper(void);
 	~UIDeviceWraper(void);
-    
 	static std::string getUDID();
     static std::string getName();
     static std::string getModel();
