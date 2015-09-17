@@ -46,10 +46,12 @@ extern UpdatedTransactionsCallBack s_UpdatedTransactionsCallBack;
             product = item;
         }
     }
-    SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
-    [payment setQuantity:quantity];
-    [[SKPaymentQueue defaultQueue] addPayment:payment];
-    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    if (product) {
+        SKMutablePayment* payment = [SKMutablePayment paymentWithProduct:product];
+        [payment setQuantity:quantity];
+        [[SKPaymentQueue defaultQueue] addPayment:payment];
+        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    }
 }
 - (void) paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {

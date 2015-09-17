@@ -1,6 +1,7 @@
 #import "SKProductsRequestDelegateImp.h"
 #include "SKProductsRequestWraper.h"
-
+#import "SKPaymentTransactionObserverImp.h"
+extern SKPaymentTransactionObserverImp *s_SKPaymentTransactionObserverImp;
 extern RequestSKProductsCallback s_RequestSKProductsCallback;
 @implementation SKProductsRequestDelegateImp
 #pragma mark -
@@ -13,6 +14,11 @@ extern RequestSKProductsCallback s_RequestSKProductsCallback;
 }
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
+    if(!s_SKPaymentTransactionObserverImp){
+        s_SKPaymentTransactionObserverImp = [SKPaymentTransactionObserverImp alloc];
+    }
+    s_SKPaymentTransactionObserverImp.products = response.products;
+    [s_SKPaymentTransactionObserverImp.products retain];
     std::list<SKProductWraper*> list;
     for (int index = 0; index < [response.products count]; index++) {
         SKProduct *skProduct = [response.products objectAtIndex:index];
