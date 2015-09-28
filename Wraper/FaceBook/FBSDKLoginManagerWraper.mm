@@ -106,6 +106,7 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
             resultWraper->token = new FBSDKAccessTokenWraper();
             resultWraper->isCancelled = result.isCancelled;
             if(!resultWraper->isCancelled){
+                [FBSDKAccessToken setCurrentAccessToken:result.token];
                 for (NSString *value in [result.declinedPermissions objectEnumerator]) {
                     resultWraper->declinedPermissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
                 }
