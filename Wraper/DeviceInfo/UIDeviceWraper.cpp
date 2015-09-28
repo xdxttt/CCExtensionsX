@@ -20,7 +20,7 @@ std::string UIDeviceWraper::getUDID() {
 #ifdef _WINDOWS
 	return "0000000000000000000";
 #else
-	char temp[128]={0};
+	char temp[128]={0};   
 	long seconds= time((time_t*)NULL);
 	sprintf(temp,"AD%ld/n",seconds);
 	return temp;
