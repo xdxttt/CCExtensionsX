@@ -91,7 +91,8 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
         NSString*permission = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [permissionsArray addObject:permission];
     }
-    [s_FBSDKLoginManager logInWithPublishPermissions:permissionsArray handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    UIViewController * viewController = [[ [ UIApplication sharedApplication ] keyWindow] rootViewController];
+    [s_FBSDKLoginManager logInWithPublishPermissions:permissionsArray fromViewController:viewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         NSErrorWraper *err = NULL;
         FBSDKLoginManagerLoginResultWraper* resultWraper = NULL;
         if (error) {
@@ -134,7 +135,8 @@ void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> per
         NSString*permission = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [permissionsArray addObject:permission];
     }
-    [s_FBSDKLoginManager logInWithReadPermissions:permissionsArray handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    UIViewController * viewController = [[ [ UIApplication sharedApplication ] keyWindow] rootViewController];
+    [s_FBSDKLoginManager logInWithReadPermissions:permissionsArray fromViewController:viewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
      NSErrorWraper *err = NULL;
      FBSDKLoginManagerLoginResultWraper* resultWraper = NULL;
      if (error) {

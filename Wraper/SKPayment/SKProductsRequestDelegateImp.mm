@@ -49,6 +49,13 @@ extern RequestSKProductsCallback s_RequestSKProductsCallback;
         delete *iter;
     }
 }
-
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError:%@" , error);
+    std::list<SKProductWraper*> list;
+    if(s_RequestSKProductsCallback){
+        s_RequestSKProductsCallback(list);
+    }
+}
 @end
 

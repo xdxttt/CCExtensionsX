@@ -66,7 +66,8 @@ bool VungleSDKWrapper::isAdPlayable(){
 }
 bool VungleSDKWrapper::playAd(NSErrorWraper *error){
     NSError *nserror = [[NSError alloc] autorelease];
-    BOOL ret =  [[VungleSDK sharedSDK] playAd:[UIApplication sharedApplication].keyWindow.rootViewController error:&nserror];
+    UIViewController * viewController = [[ [ UIApplication sharedApplication ] keyWindow] rootViewController];
+    BOOL ret =  [[VungleSDK sharedSDK] playAd:viewController error:&nserror];
     if (error&&nserror) {
         error->code = nserror.code;
         error->domain = [nserror.domain cStringUsingEncoding:NSUTF8StringEncoding];
