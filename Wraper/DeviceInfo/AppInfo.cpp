@@ -1,14 +1,14 @@
 #include "AppInfo.h"
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "cocos2d.h"
-#include "cocos/platform/android/jni/JniHelper.h"
-#include <jni.h>
 AppInfo::AppInfo(void) {
 }
 
 AppInfo::~AppInfo(void) {
 }
 
+#ifndef _WIN32
+#include "cocos2d.h"
+#include "cocos/platform/android/jni/JniHelper.h"
+#include <jni.h>
 std::string AppInfo::getVersion()
 {
    cocos2d::JniMethodInfo t;
@@ -28,7 +28,6 @@ std::string AppInfo::getVersion()
     }
     return std::string("UnknowVersion");
 }
-
 std::string AppInfo::getBuild()
 {
     cocos2d::JniMethodInfo t;
@@ -47,5 +46,14 @@ std::string AppInfo::getBuild()
         return ret.c_str();
     }
     return std::string("UnknowBuild");
+}
+#else
+std::string AppInfo::getVersion()
+{
+	return std::string("WindowsVersion");
+}
+std::string AppInfo::getBuild()
+{
+	return std::string("DevBuild");
 }
 #endif

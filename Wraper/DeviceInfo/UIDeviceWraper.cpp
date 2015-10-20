@@ -1,16 +1,16 @@
 #include "UIDeviceWraper.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-#include "cocos2d.h"
-#include "cocos/platform/android/jni/JniHelper.h"
-#include <jni.h>
 
 UIDeviceWraper::UIDeviceWraper(void) {
 }
 
 UIDeviceWraper::~UIDeviceWraper(void) {
-  
+
 }
 
+#ifndef _WIN32
+#include "cocos2d.h"
+#include "cocos/platform/android/jni/JniHelper.h"
+#include <jni.h>
 std::string  UIDeviceWraper::getUUID(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
@@ -141,5 +141,32 @@ std::string  UIDeviceWraper::getSystemVersion(){
         return ret.c_str();
     }
     return std::string("UnknowSystemVersion");
+}
+#else
+std::string  UIDeviceWraper::getUUID(){
+	return std::string("00000000000000000001");
+}
+
+std::string UIDeviceWraper::getUDID() {
+	return std::string("00000000000000000001");
+}
+
+std::string UIDeviceWraper::getName(){
+	return std::string("UnknowName");
+}
+std::string  UIDeviceWraper::getModel(){
+	return std::string("UnknowModel");
+}
+
+std::string  UIDeviceWraper::getLocalizedModel(){
+	return std::string("UnknowModel");
+}
+
+std::string  UIDeviceWraper::getSystemName(){
+	return std::string("UnknowSystemName");
+}
+
+std::string  UIDeviceWraper::getSystemVersion(){
+	return std::string("UnknowSystemVersion");
 }
 #endif
