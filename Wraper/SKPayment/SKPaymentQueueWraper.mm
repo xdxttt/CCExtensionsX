@@ -10,7 +10,7 @@
 #include "SKPaymentTransactionObserverImp.h"
 SKPaymentQueueWraper *s_SKPaymentQueueWraper = NULL;
 SKPaymentTransactionObserverImp *s_SKPaymentTransactionObserverImp = NULL;
-UpdatedTransactionsCallBack s_UpdatedTransactionsCallBack;
+SKPaymentQueueListener* s_SKPaymentQueueListener = NULL;
 
 SKPaymentQueueWraper::SKPaymentQueueWraper(){
 }
@@ -36,15 +36,13 @@ SKPaymentQueueWraper* SKPaymentQueueWraper::getInstance()
     }
     return s_SKPaymentQueueWraper;
 }
-void SKPaymentQueueWraper::purchase(std::string products_id,int quantity,const UpdatedTransactionsCallBack &cb){
-    s_UpdatedTransactionsCallBack = cb;
+void SKPaymentQueueWraper::purchase(SKPaymentQueueListener* listener,std::string products_id,int quantity){
+    s_SKPaymentQueueListener = listener;
     NSString *pid = [[[NSString alloc] initWithCString:products_id.c_str() encoding:NSUTF8StringEncoding] autorelease];
     [s_SKPaymentTransactionObserverImp purchase:pid Quantity:quantity];
 }
-void SKPaymentQueueWraper::restorePurchase(const UpdatedTransactionsCallBack &cb){
-    if (s_UpdatedTransactionsCallBack == NULL) {
-        s_UpdatedTransactionsCallBack = cb;
-    }
+void SKPaymentQueueWraper::restorePurchase(SKPaymentQueueListener* listener){
+    s_SKPaymentQueueListener = listener;
     [s_SKPaymentTransactionObserverImp restorePurchase];
 }
 

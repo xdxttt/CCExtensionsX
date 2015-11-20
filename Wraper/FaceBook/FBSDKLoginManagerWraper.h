@@ -1,6 +1,6 @@
 #pragma once
 #include <set>
-#include "NSErrorWraper.h"
+#include <string>
 
 class FBSDKProfileWraper{
 public:
@@ -14,7 +14,6 @@ public:
     std::string name;
     static void enableUpdatesOnAccessTokenChange(bool enable);
 };
-
 
 class FBSDKAccessTokenWraper{
 public:
@@ -31,15 +30,26 @@ public:
 };
 class FBSDKLoginManagerLoginResultWraper{
 public:
-    FBSDKLoginManagerLoginResultWraper(){};
-    ~FBSDKLoginManagerLoginResultWraper(){};
+    FBSDKLoginManagerLoginResultWraper(){
+        token = NULL;
+    };
+    ~FBSDKLoginManagerLoginResultWraper(){
+        if (token) {
+            delete token;
+        }
+    };
     FBSDKAccessTokenWraper *token;
     bool isCancelled;
     std::set<std::string> grantedPermissions;
     std::set<std::string> declinedPermissions;
 };
 
-typedef std::function<void(FBSDKLoginManagerLoginResultWraper* result,NSErrorWraper* error)> LogInWithReadPermissionsHandler;
+class FBSDKLoginManagerListener{
+public:
+    FBSDKLoginManagerListener(){};
+    virtual ~FBSDKLoginManagerListener(){};
+    virtual void onLogIn(FBSDKLoginManagerLoginResultWraper* result,const char* error) = 0;
+};
 
 class FBSDKLoginManagerWraper{
 public:
@@ -47,7 +57,18 @@ public:
     ~FBSDKLoginManagerWraper();
     static FBSDKLoginManagerWraper *getInstance();
     static void destroyInstance();
-    void logInWithReadPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd);
-    void logInWithPublishPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd);
+    void update();
+    void logInWithReadPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener);
+    void logInWithPublishPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener);
     
 };
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+extern "C"
+{
+    JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLoginSuccess(JNIEnv* env, jobject thiz,jobject obj);
+    JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLoginCancel(JNIEnv* env, jobject thiz);
+    JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLoginError(JNIEnv* env, jobject thiz,jstring string);
+};
+#endif

@@ -2,7 +2,7 @@
 #include "SKProductsRequestDelegateImp.h"
 SKProductsRequestWraper *s_SKProductsRequestWraper = NULL;
 SKProductsRequestDelegateImp *s_SKProductsRequestDelegateImp = NULL;
-RequestSKProductsCallback s_RequestSKProductsCallback = NULL;
+SKProductsRequestListener *s_SKProductsRequestListener = NULL;
 
 SKProductsRequestWraper::SKProductsRequestWraper(){
 }
@@ -28,15 +28,14 @@ SKProductsRequestWraper* SKProductsRequestWraper::getInstance()
     }
     return s_SKProductsRequestWraper;
 }
-void SKProductsRequestWraper::requestSKProducts(std::list<std::string> products_ids,const RequestSKProductsCallback &cb){
-
+void SKProductsRequestWraper::requestSKProducts(SKProductsRequestListener *listener,std::list<std::string> products_ids){
+    s_SKProductsRequestListener = listener;
     NSMutableArray *mutablearray = [[NSMutableArray alloc] initWithCapacity:products_ids.size()];
     for (std::list<std::string>::iterator iter = products_ids.begin(); iter!=products_ids.end(); iter++) {
         NSString*products_id = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [mutablearray addObject:products_id];
     }
     NSSet *productIdentifiers  = [[NSSet alloc] initWithArray:mutablearray];
-    s_RequestSKProductsCallback = cb;
     [s_SKProductsRequestDelegateImp requestSKProducts:productIdentifiers];
 }
 

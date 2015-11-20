@@ -2,7 +2,8 @@
 #include "SKProductsRequestWraper.h"
 #import "SKPaymentTransactionObserverImp.h"
 extern SKPaymentTransactionObserverImp *s_SKPaymentTransactionObserverImp;
-extern RequestSKProductsCallback s_RequestSKProductsCallback;
+extern SKProductsRequestListener *s_SKProductsRequestListener;
+
 @implementation SKProductsRequestDelegateImp
 #pragma mark -
 #pragma mark SKProductsRequestDelegate methods
@@ -42,8 +43,8 @@ extern RequestSKProductsCallback s_RequestSKProductsCallback;
     {
         NSLog(@"Invalid product id: %@" , invalidProductId);
     }
-    if(s_RequestSKProductsCallback){
-       s_RequestSKProductsCallback(list);
+    if(s_SKProductsRequestListener){
+       s_SKProductsRequestListener->RequestSKProductsCallback(list);
     }
     for (std::list<SKProductWraper*>::iterator iter = list.begin(); iter!=list.end(); iter++) {
         delete *iter;
@@ -53,8 +54,8 @@ extern RequestSKProductsCallback s_RequestSKProductsCallback;
 {
     NSLog(@"didFailWithError:%@" , error);
     std::list<SKProductWraper*> list;
-    if(s_RequestSKProductsCallback){
-        s_RequestSKProductsCallback(list);
+    if(s_SKProductsRequestListener){
+        s_SKProductsRequestListener->RequestSKProductsCallback(list);
     }
 }
 @end

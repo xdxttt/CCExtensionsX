@@ -9,7 +9,13 @@ public:
     double price;
     std::string productIdentifier;
 };
-typedef std::function<void(std::list<SKProductWraper*> products)> RequestSKProductsCallback;
+
+class SKProductsRequestListener{
+public:
+    SKProductsRequestListener(){};
+    virtual ~SKProductsRequestListener(){};
+    virtual void RequestSKProductsCallback(std::list<SKProductWraper*> products) = 0;
+};
 
 class SKProductsRequestWraper{
 public:
@@ -18,6 +24,6 @@ public:
 public:
     SKProductsRequestWraper();
     ~SKProductsRequestWraper();
-    void requestSKProducts(std::list<std::string> products_ids,const RequestSKProductsCallback &cb);
+    void requestSKProducts(SKProductsRequestListener *listener,std::list<std::string> products_ids);
 private:
 };

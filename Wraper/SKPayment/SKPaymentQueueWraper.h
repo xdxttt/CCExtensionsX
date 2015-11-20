@@ -66,7 +66,13 @@ class AppStorePurchaseContent {
     ~AppStorePurchaseContent(){}
 };
 
-typedef std::function<void(std::list<SKPaymentTransactionWraper*> appStorePaymentTransactions)> UpdatedTransactionsCallBack;
+class SKPaymentQueueListener{
+public:
+    SKPaymentQueueListener(){};
+    virtual ~SKPaymentQueueListener(){};
+    virtual void UpdatedTransactionsCallBack(std::list<SKPaymentTransactionWraper*> appStorePaymentTransactions) = 0;
+};
+
 class SKPaymentQueueWraper{
 public:
     static SKPaymentQueueWraper *getInstance();
@@ -74,7 +80,7 @@ public:
 public:
     SKPaymentQueueWraper();
     ~SKPaymentQueueWraper();
-    void purchase(std::string products_id,int quantity,const UpdatedTransactionsCallBack &cb);
-    void restorePurchase(const UpdatedTransactionsCallBack &cb);
+    void purchase(SKPaymentQueueListener *listener, std::string products_id,int quantity);
+    void restorePurchase(SKPaymentQueueListener *listener );
     void completeTransaction(std::string transactionIdentifier);
 };

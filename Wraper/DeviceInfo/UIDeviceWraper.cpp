@@ -1,20 +1,22 @@
 #include "UIDeviceWraper.h"
+#include "cocos2d.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "cocos/platform/android/jni/JniHelper.h"
+#include <jni.h>
 
 UIDeviceWraper::UIDeviceWraper(void) {
 }
 
 UIDeviceWraper::~UIDeviceWraper(void) {
-
+    
 }
-
-#ifndef _WIN32
-#include "cocos2d.h"
-#include "cocos/platform/android/jni/JniHelper.h"
-#include <jni.h>
+std::string UIDeviceWraper::getDeviceType(){
+    return std::string("A");
+}
 std::string  UIDeviceWraper::getUUID(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getUUID"
                                        , "()Ljava/lang/String;"))
     {
@@ -33,7 +35,7 @@ std::string  UIDeviceWraper::getUUID(){
 std::string UIDeviceWraper::getUDID() {
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                                , "getUDID"
                                                , "()Ljava/lang/String;"))
     {
@@ -52,7 +54,7 @@ std::string UIDeviceWraper::getUDID() {
 std::string UIDeviceWraper::getName(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getName"
                                        , "()Ljava/lang/String;"))
     {
@@ -70,7 +72,7 @@ std::string UIDeviceWraper::getName(){
 std::string  UIDeviceWraper::getModel(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getModel"
                                        , "()Ljava/lang/String;"))
     {
@@ -89,7 +91,7 @@ std::string  UIDeviceWraper::getModel(){
 std::string  UIDeviceWraper::getLocalizedModel(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getLocalizedModel"
                                        , "()Ljava/lang/String;"))
     {
@@ -108,18 +110,17 @@ std::string  UIDeviceWraper::getLocalizedModel(){
 std::string  UIDeviceWraper::getSystemName(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getSystemName"
                                        , "()Ljava/lang/String;"))
     {
         jstring jstr = NULL;
         jstr = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
-        char* cstr = NULL;
-        cstr = (char*) t.env->GetStringUTFChars(jstr, 0);
-        std::string ret(cstr);
-        t.env->ReleaseStringUTFChars(jstr, cstr);
+        std::string ret = cocos2d::JniHelper::jstring2string(jstr);
         t.env->DeleteLocalRef(jstr);
-        return ret.c_str();
+        t.env->DeleteLocalRef(t.classID);
+
+        return ret;
     }
     return std::string("UnknowSystemName");
 }
@@ -127,7 +128,7 @@ std::string  UIDeviceWraper::getSystemName(){
 std::string  UIDeviceWraper::getSystemVersion(){
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                                       , "org/cocos2dx/cpp/UIDeviceWraper"
+                                       , "com/malom/ccextensions/UIDeviceWraper"
                                        , "getSystemVersion"
                                        , "()Ljava/lang/String;"))
     {
@@ -142,7 +143,15 @@ std::string  UIDeviceWraper::getSystemVersion(){
     }
     return std::string("UnknowSystemVersion");
 }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+UIDeviceWraper::UIDeviceWraper(void) {
+}
+
+UIDeviceWraper::~UIDeviceWraper(void) {
+    
+}
+
 std::string  UIDeviceWraper::getUUID(){
 	return std::string("00000000000000000001");
 }
