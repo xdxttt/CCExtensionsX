@@ -7,37 +7,36 @@
 //
 
 #include "FBSDKLoginManagerWraper.h"
+#include "cocos2d.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "NSErrorWraper.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 FBSDKLoginManagerWraper*s_FBSDKLoginManagerWraper = NULL;
-FBSDKLoginManager *s_FBSDKLoginManager = NULL;
-LogInWithReadPermissionsHandler s_LogInWithReadPermissionsHandler;
-FBSDKAccessTokenWraper* s_tokenWraper = NULL;
-FBSDKProfileWraper *s_FBSDKProfileWraper = NULL;
+FBSDKLoginManagerListener *s_FBSDKLoginManagerListener = NULL;
 
+FBSDKLoginManager *s_FBSDKLoginManager = NULL;
 FBSDKProfileWraper* FBSDKProfileWraper::currentProfile(){
     FBSDKProfile * profile = [FBSDKProfile currentProfile];
     if (profile) {
-        if (s_FBSDKProfileWraper==NULL) {
-            s_FBSDKProfileWraper = new FBSDKProfileWraper();
-        }
+        FBSDKProfileWraper *profileWraper = new FBSDKProfileWraper();
         if (profile.userID) {
-            s_FBSDKProfileWraper->userID = [profile.userID cStringUsingEncoding:NSUTF8StringEncoding];
+            profileWraper->userID = [profile.userID cStringUsingEncoding:NSUTF8StringEncoding];
         }
         if (profile.firstName) {
-            s_FBSDKProfileWraper->firstName = [profile.firstName cStringUsingEncoding:NSUTF8StringEncoding];
+            profileWraper->firstName = [profile.firstName cStringUsingEncoding:NSUTF8StringEncoding];
         }
         if (profile.middleName) {
-            s_FBSDKProfileWraper->middleName = [profile.middleName cStringUsingEncoding:NSUTF8StringEncoding];
+            profileWraper->middleName = [profile.middleName cStringUsingEncoding:NSUTF8StringEncoding];
         }
         if (profile.lastName) {
-            s_FBSDKProfileWraper->lastName = [profile.lastName cStringUsingEncoding:NSUTF8StringEncoding];
+            profileWraper->lastName = [profile.lastName cStringUsingEncoding:NSUTF8StringEncoding];
         }
         if (profile.name) {
-            s_FBSDKProfileWraper->name = [profile.name cStringUsingEncoding:NSUTF8StringEncoding];
+            profileWraper->name = [profile.name cStringUsingEncoding:NSUTF8StringEncoding];
         }
-        return s_FBSDKProfileWraper;
+        return profileWraper;
     }else{
         return  NULL;
     }
@@ -49,19 +48,17 @@ void FBSDKProfileWraper::enableUpdatesOnAccessTokenChange(bool enable){
 FBSDKAccessTokenWraper* FBSDKAccessTokenWraper::currentAccessToken(){
     FBSDKAccessToken* token = [FBSDKAccessToken currentAccessToken];
     if(token){
-        if (s_tokenWraper==NULL) {
-            s_tokenWraper = new FBSDKAccessTokenWraper();
-        }
-        s_tokenWraper->appID = [token.appID cStringUsingEncoding:NSUTF8StringEncoding];
-        s_tokenWraper->tokenString = [token.tokenString cStringUsingEncoding:NSUTF8StringEncoding];
-        s_tokenWraper->userID = [token.userID cStringUsingEncoding:NSUTF8StringEncoding];
+        FBSDKAccessTokenWraper *tokenWraper = new FBSDKAccessTokenWraper();
+        tokenWraper->appID = [token.appID cStringUsingEncoding:NSUTF8StringEncoding];
+        tokenWraper->tokenString = [token.tokenString cStringUsingEncoding:NSUTF8StringEncoding];
+        tokenWraper->userID = [token.userID cStringUsingEncoding:NSUTF8StringEncoding];
         for (NSString *value in [token.permissions objectEnumerator]) {
-            s_tokenWraper->permissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
+            tokenWraper->permissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
         }
         for (NSString *value in [token.declinedPermissions objectEnumerator]) {
-            s_tokenWraper->declinedPermissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
+            tokenWraper->declinedPermissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
         }
-        return s_tokenWraper;
+        return tokenWraper;
     }else{
         return  NULL;
     }
@@ -83,15 +80,19 @@ void FBSDKLoginManagerWraper::destroyInstance(){
         [s_FBSDKLoginManager release];
     }
 }
-void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd){
-    s_LogInWithReadPermissionsHandler = hd;
+void FBSDKLoginManagerWraper::update(){
+}
+
+void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener){
+    s_FBSDKLoginManagerListener = listener;
     
     NSMutableArray *permissionsArray = [[NSMutableArray alloc] initWithCapacity:permissions.size()];
     for (std::set<std::string>::iterator iter = permissions.begin(); iter!=permissions.end(); iter++) {
         NSString*permission = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [permissionsArray addObject:permission];
     }
-    [s_FBSDKLoginManager logInWithPublishPermissions:permissionsArray handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    UIViewController * viewController = [[ [ UIApplication sharedApplication ] keyWindow] rootViewController];
+    [s_FBSDKLoginManager logInWithPublishPermissions:permissionsArray fromViewController:viewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         NSErrorWraper *err = NULL;
         FBSDKLoginManagerLoginResultWraper* resultWraper = NULL;
         if (error) {
@@ -106,6 +107,7 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
             resultWraper->token = new FBSDKAccessTokenWraper();
             resultWraper->isCancelled = result.isCancelled;
             if(!resultWraper->isCancelled){
+                [FBSDKAccessToken setCurrentAccessToken:result.token];
                 for (NSString *value in [result.declinedPermissions objectEnumerator]) {
                     resultWraper->declinedPermissions.insert([value cStringUsingEncoding:NSUTF8StringEncoding]);
                 }
@@ -123,17 +125,22 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
                 }
             }
         }
-        s_LogInWithReadPermissionsHandler(resultWraper,err);
+        if(err){
+            s_FBSDKLoginManagerListener->onLogIn(resultWraper,err->domain.c_str());
+        }else{
+            s_FBSDKLoginManagerListener->onLogIn(resultWraper,NULL);
+        }
     }];
 }
-void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> permissions,const LogInWithReadPermissionsHandler &hd){
-    s_LogInWithReadPermissionsHandler = hd;
+void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener){
+    s_FBSDKLoginManagerListener = listener;
     NSMutableArray *permissionsArray = [[NSMutableArray alloc] initWithCapacity:permissions.size()];
     for (std::set<std::string>::iterator iter = permissions.begin(); iter!=permissions.end(); iter++) {
         NSString*permission = [[NSString alloc] initWithCString:(*iter).c_str() encoding:NSUTF8StringEncoding];
         [permissionsArray addObject:permission];
     }
-    [s_FBSDKLoginManager logInWithReadPermissions:permissionsArray handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    UIViewController * viewController = [[ [ UIApplication sharedApplication ] keyWindow] rootViewController];
+    [s_FBSDKLoginManager logInWithReadPermissions:permissionsArray fromViewController:viewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
      NSErrorWraper *err = NULL;
      FBSDKLoginManagerLoginResultWraper* resultWraper = NULL;
      if (error) {
@@ -165,6 +172,11 @@ void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> per
      }
      }
      }
-     s_LogInWithReadPermissionsHandler(resultWraper,err);
+        if(err){
+            s_FBSDKLoginManagerListener->onLogIn(resultWraper,err->domain.c_str());
+        }else{
+            s_FBSDKLoginManagerListener->onLogIn(resultWraper,NULL);
+        }
      }];
 }
+#endif

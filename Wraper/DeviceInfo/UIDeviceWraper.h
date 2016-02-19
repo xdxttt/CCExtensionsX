@@ -12,4 +12,5 @@ public:
     static std::string getSystemVersion();
     static std::string getUUID();
 	static std::string getDefaultLanguage();
+    static std::string getDeviceType();
 };

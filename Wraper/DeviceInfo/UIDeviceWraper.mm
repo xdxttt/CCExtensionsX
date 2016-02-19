@@ -9,7 +9,9 @@ UIDeviceWraper::UIDeviceWraper(void) {
 
 UIDeviceWraper::~UIDeviceWraper(void) {
 }
-
+std::string UIDeviceWraper::getDeviceType(){
+    return std::string("I");
+}
 std::string  UIDeviceWraper::getUUID(){
     UIDevice *device_=[[UIDevice alloc] init];
     return [device_.identifierForVendor.UUIDString cStringUsingEncoding: NSUTF8StringEncoding];
@@ -49,7 +51,6 @@ std::string  UIDeviceWraper::getSystemVersion(){
     UIDevice *device_=[[UIDevice alloc] init];
     return [device_.systemVersion cStringUsingEncoding: NSUTF8StringEncoding];
 }
-
 
 #endif
 
