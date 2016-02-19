@@ -1,6 +1,6 @@
 #include "AppInfo.h"
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "cocos2d.h"
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "cocos/platform/android/jni/JniHelper.h"
 #include <jni.h>
 AppInfo::AppInfo(void) {

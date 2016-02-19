@@ -3,7 +3,6 @@
 //TODO change TO Virtul Class
 typedef std::function<void(std::string location)> ChartboostDelegateWrapper;
 
-
 class ChartboostWrapper{
 public:
     ChartboostWrapper(void);
