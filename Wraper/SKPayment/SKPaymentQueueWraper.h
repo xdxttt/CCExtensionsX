@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <string>
 enum {
     AppStorePaymentTransactionStatePurchasing,    // Transaction is being added to the server queue.
     AppStorePaymentTransactionStatePurchased,     // Transaction is in queue, user has been charged.  Client should complete the transaction.
