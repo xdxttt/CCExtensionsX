@@ -1,6 +1,5 @@
 #pragma once
 #include "NSErrorWraper.h"
-
 class GKPlayerWraper{
 public:
     GKPlayerWraper();
