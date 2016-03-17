@@ -8,6 +8,7 @@ public:
     std::string localizedDescription;
     std::string localizedTitle;
     std::string priceLocale;
+    std::string localeCurrencyCode;
     double price;
     std::string productIdentifier;
 };

@@ -30,6 +30,9 @@ extern SKProductsRequestListener *s_SKProductsRequestListener;
         item->localizedDescription = [skProduct.localizedDescription UTF8String];
         item->price = [skProduct.price doubleValue];
         
+        NSString *currencyCode = [skProduct.priceLocale objectForKey:NSLocaleCurrencyCode];
+        item->localeCurrencyCode = [currencyCode UTF8String];
+        
         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
         [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
         [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
