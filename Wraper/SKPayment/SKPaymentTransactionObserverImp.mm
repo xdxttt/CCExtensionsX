@@ -1,10 +1,3 @@
-//
-//  InAppPurchaseManager.m
-//
-//  Created by xudexin on 13-4-23.
-//
-//
-
 #import "SKPaymentTransactionObserverImp.h"
 #include "SKPaymentQueueWraper.h"
 extern SKPaymentTransactionObserverImp *s_SKPaymentTransactionObserverImp;

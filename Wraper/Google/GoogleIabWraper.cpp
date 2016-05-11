@@ -177,6 +177,10 @@ JNIEXPORT void JNICALL Java_com_malom_ccextensions_GoogleIabWraper_QueryInventor
             retStr = (jstring)env->CallObjectMethod(SkuDetailsObj,methodId);
             skuDetailsWraper->mDescription = cocos2d::JniHelper::jstring2string(retStr);
             
+            methodId = env->GetMethodID(env->GetObjectClass(SkuDetailsObj), "getCurrencyCode","()Ljava/lang/String;");
+            retStr = (jstring)env->CallObjectMethod(SkuDetailsObj,methodId);
+            skuDetailsWraper->mCurrencyCode = cocos2d::JniHelper::jstring2string(retStr);
+            
             methodId = env->GetMethodID(env->GetObjectClass(entrysObj), "hasNext","()Z");
             jhasNext = env->CallBooleanMethod(entrysObj,methodId);
         }
@@ -459,6 +463,8 @@ void GoogleIabWraper::update(){
 }
 
 void GoogleIabWraper::startSetup(GoogleIabListener* listener){
+    cocos2d::log("startSetup");
+
     s_GoogleIabListener = listener;
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
@@ -466,10 +472,12 @@ void GoogleIabWraper::startSetup(GoogleIabListener* listener){
                                                 , "startSetup"
                                                 , "()V"))
     {
-        t.env->CallStaticObjectMethod(t.classID,t.methodID);
+        t.env->CallStaticVoidMethod(t.classID,t.methodID);
     }
 }
 void GoogleIabWraper::queryInventory(std::list<std::string> skulist){
+    cocos2d::log("queryInventory");
+
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
                                                 , "com/malom/ccextensions/GoogleIabWraper"
@@ -488,10 +496,11 @@ void GoogleIabWraper::queryInventory(std::list<std::string> skulist){
             t.env->SetObjectArrayElement(argsArray,i,t.env->NewStringUTF((*it).c_str()));
             i++;
         }
-        t.env->CallStaticObjectMethod(t.classID, t.methodID,argsArray);
+        t.env->CallStaticVoidMethod(t.classID, t.methodID,argsArray);
     }
 }
 void GoogleIabWraper::launchPurchaseFlow(std::string sku,int rc, std::string payload){
+     cocos2d::log("GoogleIabWraper::launchPurchaseFlow [%s]",sku.c_str());
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
                                                 , "com/malom/ccextensions/GoogleIabWraper"
@@ -501,11 +510,13 @@ void GoogleIabWraper::launchPurchaseFlow(std::string sku,int rc, std::string pay
         jstring jsku = t.env->NewStringUTF(sku.c_str());
         jint jrc = rc;
         jstring jplayload = t.env->NewStringUTF(payload.c_str());
-        t.env->CallStaticObjectMethod(t.classID,t.methodID,jsku,jrc,jplayload);
+        t.env->CallStaticVoidMethod(t.classID,t.methodID,jsku,jrc,jplayload);
     }
 }
 
 void GoogleIabWraper::consumeAsync(PurchaseWraper *purchase){
+    cocos2d::log("consumeAsync");
+
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
                                                 , "com/malom/ccextensions/GoogleIabWraper"
@@ -518,7 +529,7 @@ void GoogleIabWraper::consumeAsync(PurchaseWraper *purchase){
                                            t.env->NewStringUTF(purchase->mItemType.c_str()),
                                            t.env->NewStringUTF(purchase->mOriginalJson.c_str()),
                                            t.env->NewStringUTF(purchase->mSignature.c_str()));
-        t.env->CallStaticObjectMethod(t.classID,t.methodID,purchaseObj);
+        t.env->CallStaticVoidMethod(t.classID,t.methodID,purchaseObj);
     }
 }
 

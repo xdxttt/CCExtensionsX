@@ -82,6 +82,9 @@ void FBSDKLoginManagerWraper::destroyInstance(){
 }
 void FBSDKLoginManagerWraper::update(){
 }
+void FBSDKLoginManagerWraper::logOut(){
+    [s_FBSDKLoginManager logOut];
+}
 
 void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener){
     s_FBSDKLoginManagerListener = listener;

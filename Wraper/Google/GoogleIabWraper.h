@@ -15,6 +15,7 @@ public:
     std::string mPrice;
     std::string mTitle;
     std::string mDescription;
+    std::string mCurrencyCode;
     std::string mJson;
 };
 

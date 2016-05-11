@@ -28,5 +28,6 @@ public:
     SKProductsRequestWraper();
     ~SKProductsRequestWraper();
     void requestSKProducts(SKProductsRequestListener *listener,std::list<std::string> products_ids);
+    void cancel();
 private:
 };

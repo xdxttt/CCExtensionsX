@@ -38,4 +38,8 @@ void SKProductsRequestWraper::requestSKProducts(SKProductsRequestListener *liste
     NSSet *productIdentifiers  = [[NSSet alloc] initWithArray:mutablearray];
     [s_SKProductsRequestDelegateImp requestSKProducts:productIdentifiers];
 }
+void SKProductsRequestWraper::cancel(){
+    s_SKProductsRequestListener = NULL;
+}
+
 

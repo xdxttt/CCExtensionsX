@@ -125,6 +125,16 @@ void FBSDKLoginManagerWraper::destroyInstance(){
         delete s_FBSDKLoginManagerWraper;
     }
 }
+void FBSDKLoginManagerWraper::logOut(){
+    cocos2d::JniMethodInfo t;
+    if (cocos2d::JniHelper::getStaticMethodInfo(t
+                                                , "com/malom/ccextensions/FBSDKLoginManagerWraper"
+                                                , "logOut"
+                                                , "()V"))
+    {
+        t.env->CallStaticVoidMethod(t.classID, t.methodID);
+    }
+}
 void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener){
     s_FBSDKLoginManagerListener = listener;
     
@@ -145,7 +155,7 @@ void FBSDKLoginManagerWraper::logInWithPublishPermissions(std::set<std::string> 
             t.env->SetObjectArrayElement(argsArray,i,t.env->NewStringUTF((*it).c_str()));
             i++;
         }
-        t.env->CallStaticObjectMethod(t.classID, t.methodID,argsArray);
+        t.env->CallStaticVoidMethod(t.classID, t.methodID,argsArray);
     }
 }
 void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener){
@@ -156,7 +166,6 @@ void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> per
                                                 , "logInWithReadPermissions"
                                                 , "([Ljava/lang/String;)V"))
     {
-        
         jobjectArray argsArray = (jobjectArray)t.env->NewObjectArray(permissions.size(),
                                                                      t.env->FindClass("java/lang/String"),
                                                                      t.env->NewStringUTF(""));
@@ -168,7 +177,7 @@ void FBSDKLoginManagerWraper::logInWithReadPermissions(std::set<std::string> per
             t.env->SetObjectArrayElement(argsArray,i,t.env->NewStringUTF((*it).c_str()));
             i++;
         }
-        t.env->CallStaticObjectMethod(t.classID, t.methodID,argsArray);
+        t.env->CallStaticVoidMethod(t.classID, t.methodID,argsArray);
     }
 }
 void FBSDKLoginManagerWraper::update(){
@@ -181,8 +190,9 @@ void FBSDKLoginManagerWraper::update(){
         g_OnFBSDKLoginManagerListener = NULL;
     }
     pthread_mutex_unlock(&fbLock);
-
 }
+
+
 JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLoginSuccess(JNIEnv* env, jobject thiz,jobject obj)
 {
 
@@ -225,7 +235,6 @@ JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLog
 }
 JNIEXPORT void JNICALL Java_com_malom_ccextensions_FBSDKLoginManagerWraper_onLoginError(JNIEnv* env, jobject thiz,jstring string)
 {
-    
     pthread_mutex_lock(&fbLock);
     g_OnFBSDKLoginManagerListener = new OnFBSDKLoginManagerListener();
     g_OnFBSDKLoginManagerListener->error = env->GetStringUTFChars(string, NULL);

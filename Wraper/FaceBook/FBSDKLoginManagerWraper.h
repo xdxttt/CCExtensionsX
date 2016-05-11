@@ -60,6 +60,7 @@ public:
     void update();
     void logInWithReadPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener);
     void logInWithPublishPermissions(std::set<std::string> permissions,FBSDKLoginManagerListener *listener);
+    void logOut();
     
 };
 
